@@ -89,7 +89,7 @@
   }
 
   /* ---------- Stat strip ---------- */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
   .stat{
     background:var(--paper-raised);border:1px solid var(--line);border-radius:12px;
     padding:12px 10px;text-align:center;box-shadow:var(--shadow);
@@ -100,6 +100,8 @@
   .stat.missed .num{color:var(--rust);}
   .stat.off .num{color:var(--gold);}
   .stat.hours .num{color:var(--navy);}
+  .stat.late .num{color:#B45A2E;}
+  .stat.early .num{color:#8A5CB8;}
 
   /* ---------- Month nav ---------- */
   .monthbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -134,9 +136,14 @@
   .day.off{background:var(--gold-soft);border-color:var(--gold);}
   .day.off .dnum{color:var(--gold);}
   .day.weekend:not(.worked):not(.off):not(.missed){background:#F5F5F3;}
+  .day.in-progress{background:var(--navy-soft);border-color:var(--navy);}
+  .day.in-progress .dnum{color:var(--navy);}
+  .day.incomplete{background:var(--navy-soft);border-color:var(--navy);border-style:dashed;}
+  .day.incomplete .dnum{color:var(--navy);}
   .day.future{opacity:0.55;}
   .day.today{box-shadow:0 0 0 2px var(--navy) inset;}
   .day .dot{position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--navy);}
+  .day .flagdot{position:absolute;bottom:4px;right:4px;width:5px;height:5px;border-radius:50%;background:#B45A2E;}
 
   .legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:11px;color:var(--ink-soft);}
   .legend span{display:flex;align-items:center;gap:5px;}
@@ -179,12 +186,50 @@
   .tab.active{background:var(--paper-raised);color:var(--ink);box-shadow:var(--shadow);}
   .field{margin-bottom:14px;}
   .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
-  .field input[type=time], .field input[type=text], .field select{
+  .field input[type=text], .field select{
     width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
     font-family:var(--font-mono);font-size:14px;background:var(--paper);color:var(--ink);
   }
   .field select{font-family:var(--font-body);}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+  /* ---------- Time field button (opens analog picker) ---------- */
+  .timefield{
+    width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
+    font-family:var(--font-mono);font-size:14px;background:var(--paper);color:var(--ink);
+    display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;
+    text-align:left;
+  }
+  .timefield:hover{border-color:var(--teal);}
+  .timefield.empty{color:var(--ink-soft);}
+  .timefield .clockicon{width:15px;height:15px;flex-shrink:0;color:var(--ink-soft);}
+  .timefield-row{display:flex;align-items:center;gap:6px;}
+  .timefield-clear{
+    width:38px;height:38px;flex-shrink:0;border-radius:10px;border:1px solid var(--line);
+    background:var(--paper-raised);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink-soft);
+  }
+  .timefield-clear:hover{border-color:var(--rust);color:var(--rust);}
+
+  /* ---------- Analog clock picker ---------- */
+  .tp-sheet{max-width:320px;text-align:center;}
+  .tp-header{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;}
+  .tp-digital{font-family:var(--font-mono);font-size:34px;font-weight:600;color:var(--ink-soft);cursor:pointer;padding:2px 4px;border-radius:6px;}
+  .tp-digital.active{color:var(--teal);background:var(--teal-soft);}
+  .tp-colon{font-family:var(--font-mono);font-size:34px;font-weight:600;color:var(--ink-soft);}
+  .tp-ampm{display:flex;flex-direction:column;gap:4px;margin-left:6px;}
+  .tp-ampm button{
+    font-family:var(--font-body);font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;
+    border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;
+  }
+  .tp-ampm button.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .tp-clockwrap{display:flex;justify-content:center;margin-bottom:18px;touch-action:none;}
+  .tp-clockwrap svg{width:230px;height:230px;user-select:none;}
+  .tp-face{fill:var(--paper);stroke:var(--line);stroke-width:1.5;}
+  .tp-center{fill:var(--teal);}
+  .tp-hand{stroke:var(--teal);stroke-width:2.5;stroke-linecap:round;}
+  .tp-knob{fill:var(--teal);opacity:0.9;}
+  .tp-num{font-family:var(--font-mono);font-size:13px;font-weight:600;fill:var(--ink);pointer-events:none;}
   .sheet-actions{display:flex;gap:8px;margin-top:6px;}
   .hint{font-size:11px;color:var(--ink-soft);margin-top:-6px;margin-bottom:14px;}
   .close-x{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--ink-soft);cursor:pointer;padding:4px;}
@@ -238,6 +283,8 @@
     <div class="stat missed"><div class="num" id="statMissed">0</div><div class="lbl">অনুপস্থিত</div></div>
     <div class="stat off"><div class="num" id="statOff">0</div><div class="lbl">ছুটি</div></div>
     <div class="stat hours"><div class="num" id="statHours">0</div><div class="lbl">মোট ঘণ্টা</div></div>
+    <div class="stat late"><div class="num" id="statLate">0</div><div class="lbl">দেরি</div></div>
+    <div class="stat early"><div class="num" id="statEarly">0</div><div class="lbl">আগে বের</div></div>
   </div>
 
   <!-- Calendar -->
@@ -262,9 +309,11 @@
     <div class="grid" id="calGrid"></div>
     <div class="legend">
       <span><i style="background:var(--teal)"></i> ডিউটি করা হয়েছে</span>
+      <span><i style="background:var(--navy)"></i> চলছে / এক্সিট বাকি</span>
       <span><i style="background:var(--rust)"></i> অনুপস্থিত</span>
       <span><i style="background:var(--gold)"></i> ছুটি / বন্ধ</span>
       <span><i style="background:#D9D9D6"></i> সাপ্তাহিক ছুটি</span>
+      <span><i style="background:#B45A2E"></i> দেরি / আগে বের</span>
     </div>
   </div>
 
@@ -316,14 +365,25 @@
       <div class="row2">
         <div class="field">
           <label>এন্ট্রি টাইম</label>
-          <input type="time" id="entryTime">
+          <button type="button" class="timefield empty" id="entryTimeBtn">
+            <span id="entryTimeLabel">সময় নির্বাচন করুন</span>
+            <svg class="clockicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </button>
         </div>
         <div class="field">
-          <label>এক্সিট টাইম</label>
-          <input type="time" id="exitTime">
+          <label>এক্সিট টাইম (ঐচ্ছিক)</label>
+          <div class="timefield-row">
+            <button type="button" class="timefield empty" id="exitTimeBtn">
+              <span id="exitTimeLabel">এখনো দিইনি</span>
+              <svg class="clockicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            </button>
+            <button type="button" class="timefield-clear" id="exitTimeClear" title="এক্সিট টাইম মুছুন">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
         </div>
       </div>
-      <div class="hint" id="durationHint"></div>
+      <div class="hint" id="durationHint">শুধু এন্ট্রি টাইম দিলেও সংরক্ষণ হবে — এক্সিট টাইম পরে যোগ করতে পারবেন।</div>
     </div>
 
     <div id="offFields" style="display:none;">
@@ -349,9 +409,51 @@
     <h3>সেটিংস</h3>
     <div class="subdate">সাপ্তাহিক ছুটির দিন নির্বাচন করুন</div>
     <div class="weekgrid" id="weekgrid"></div>
-    <div class="hint">নির্বাচিত দিনগুলোতে এন্ট্রি না দিলে "অনুপস্থিত" হিসেবে দেখাবে না।</div>
+    <div class="hint" style="margin-bottom:20px;">নির্বাচিত দিনগুলোতে এন্ট্রি না দিলে "অনুপস্থিত" হিসেবে দেখাবে না।</div>
+
+    <div class="subdate" style="margin-bottom:12px;">ডিউটি আওয়ার (দেরি/আগে বের হওয়া হিসাব করতে)</div>
+    <div class="row2">
+      <div class="field">
+        <label>শুরু</label>
+        <button type="button" class="timefield" id="dutyStartBtn">
+          <span id="dutyStartLabel">09:00 AM</span>
+          <svg class="clockicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </button>
+      </div>
+      <div class="field">
+        <label>শেষ</label>
+        <button type="button" class="timefield" id="dutyEndBtn">
+          <span id="dutyEndLabel">05:00 PM</span>
+          <svg class="clockicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="hint">এন্ট্রি টাইম শুরুর সময়ের পরে হলে "দেরি", আর এক্সিট টাইম শেষের সময়ের আগে হলে "আগে বের হওয়া" হিসেবে গণনা হবে।</div>
+
     <div class="sheet-actions">
       <button class="btn primary" id="saveSettingsBtn" style="width:100%;">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Analog time picker -->
+<div class="overlay" id="tpOverlay">
+  <div class="sheet tp-sheet">
+    <div class="tp-header">
+      <span class="tp-digital" id="tpHourDisplay">09</span>
+      <span class="tp-colon">:</span>
+      <span class="tp-digital" id="tpMinuteDisplay">00</span>
+      <div class="tp-ampm">
+        <button type="button" data-ap="AM" id="tpAM">AM</button>
+        <button type="button" data-ap="PM" id="tpPM">PM</button>
+      </div>
+    </div>
+    <div class="tp-clockwrap">
+      <svg id="tpClockSvg" viewBox="0 0 200 200"></svg>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn" id="tpCancel">বাতিল</button>
+      <button class="btn primary" id="tpOk">ঠিক আছে</button>
     </div>
   </div>
 </div>
@@ -387,11 +489,23 @@
   function loadSettings(){
     try{
       const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
-      if(s && Array.isArray(s.weekend)) return s;
+      if(s && Array.isArray(s.weekend)){
+        if(!s.dutyStart) s.dutyStart = '09:00';
+        if(!s.dutyEnd) s.dutyEnd = '17:00';
+        return s;
+      }
     }catch(e){}
-    return { weekend: [5,6] }; // default Friday-Saturday (Bangladesh)
+    return { weekend: [5,6], dutyStart:'09:00', dutyEnd:'17:00' }; // default Fri-Sat weekend, 9AM-5PM duty
   }
   function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
+
+  function to12Hour(t24){
+    if(!t24) return null;
+    const [h,m] = t24.split(':').map(Number);
+    const ampm = h < 12 ? 'AM' : 'PM';
+    let h12 = h % 12; if(h12===0) h12 = 12;
+    return String(h12).padStart(2,'0')+':'+String(m).padStart(2,'0')+' '+ampm;
+  }
 
   function fmtDateKey(y,m,d){
     return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
@@ -432,7 +546,11 @@
     const isFuture = dObj > new Date(new Date().setHours(0,0,0,0));
 
     if(entry && entry.type === 'work'){
-      return {status:'worked', key, entry};
+      if(entry.exit){
+        return {status:'worked', key, entry};
+      }
+      // entry logged but no exit yet
+      return {status: isToday ? 'in-progress' : 'incomplete', key, entry};
     }
     if(entry && entry.type === 'off'){
       return {status:'off', key, entry};
@@ -447,6 +565,21 @@
       return {status:'today-pending', key, entry:null};
     }
     return {status:'missed', key, entry:null};
+  }
+
+  // Returns {late:bool, early:bool} for a work entry, based on configured duty hours.
+  function getFlags(entry){
+    const flags = {late:false, early:false};
+    if(!entry || entry.type !== 'work') return flags;
+    const startMin = timeToMinutes(settings.dutyStart);
+    const endMin = timeToMinutes(settings.dutyEnd);
+    const entryMin = timeToMinutes(entry.entry);
+    if(entryMin!=null && startMin!=null && entryMin > startMin) flags.late = true;
+    if(entry.exit){
+      const exitMin = timeToMinutes(entry.exit);
+      if(exitMin!=null && endMin!=null && exitMin < endMin) flags.early = true;
+    }
+    return flags;
   }
 
   // ---------- Rendering ----------
@@ -488,6 +621,25 @@
         sub.className = 'dsub';
         sub.textContent = dur ? dur.hours+'.'+String(Math.round(dur.minutes/60*10)).padStart(1,'0')+'ঘ' : '';
         cell.appendChild(sub);
+        const flags = getFlags(info.entry);
+        if(flags.late || flags.early){
+          const fd = document.createElement('div');
+          fd.className = 'flagdot';
+          fd.title = [flags.late?'দেরি':'', flags.early?'আগে বের':''].filter(Boolean).join(', ');
+          cell.appendChild(fd);
+        }
+      } else if(info.status === 'in-progress' || info.status === 'incomplete'){
+        const sub = document.createElement('div');
+        sub.className = 'dsub';
+        sub.textContent = 'চলছে';
+        cell.appendChild(sub);
+        const flags = getFlags(info.entry);
+        if(flags.late){
+          const fd = document.createElement('div');
+          fd.className = 'flagdot';
+          fd.title = 'দেরি';
+          cell.appendChild(fd);
+        }
       }
       if(info.status === 'today-pending'){
         const dot = document.createElement('div');
@@ -501,13 +653,20 @@
 
   function renderStats(){
     const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
-    let present=0, missed=0, off=0, totalMin=0;
+    let present=0, missed=0, off=0, totalMin=0, late=0, early=0;
     for(let d=1; d<=daysInMonth; d++){
       const info = getDayStatus(viewYear, viewMonth, d);
       if(info.status==='worked'){
         present++;
         const dur = durationLabel(info.entry.entry, info.entry.exit);
         if(dur) totalMin += dur.totalMinutes;
+        const flags = getFlags(info.entry);
+        if(flags.late) late++;
+        if(flags.early) early++;
+      } else if(info.status==='in-progress' || info.status==='incomplete'){
+        present++;
+        const flags = getFlags(info.entry);
+        if(flags.late) late++;
       } else if(info.status==='missed'){
         missed++;
       } else if(info.status==='off'){
@@ -518,6 +677,8 @@
     document.getElementById('statMissed').textContent = missed;
     document.getElementById('statOff').textContent = off;
     document.getElementById('statHours').textContent = (totalMin/60).toFixed(1);
+    document.getElementById('statLate').textContent = late;
+    document.getElementById('statEarly').textContent = early;
   }
 
   function renderTodayCard(){
@@ -527,16 +688,28 @@
     const now = new Date();
     const dateStr = now.getDate()+' '+MONTH_BN[now.getMonth()]+' '+now.getFullYear();
 
-    if(entry && entry.type === 'work'){
+    if(entry && entry.type === 'work' && entry.exit){
       const dur = durationLabel(entry.entry, entry.exit);
+      const flags = getFlags(entry);
+      const flagNote = [flags.late?'দেরিতে ঢুকেছেন':'', flags.early?'আগে বের হয়েছেন':''].filter(Boolean).join(' · ');
       el.innerHTML = `
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
         <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
           <div style="font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--teal);">${dur? dur.label : '—'}</div>
           <div style="font-size:12px;color:var(--ink-soft);">ডিউটি করেছেন আজ</div>
         </div>
-        <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">${entry.entry} → ${entry.exit}</div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">${to12Hour(entry.entry)} → ${to12Hour(entry.exit)}</div>
+        ${flagNote ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;">${flagNote}</div>` : ''}
         <button class="btn" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এডিট করুন</button>
+      `;
+    } else if(entry && entry.type === 'work' && !entry.exit){
+      const flags = getFlags(entry);
+      el.innerHTML = `
+        <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
+        <div style="font-size:16px;font-weight:600;color:var(--navy);">এখনো ডিউটিতে আছেন</div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">এন্ট্রি: ${to12Hour(entry.entry)}</div>
+        ${flags.late ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;">দেরিতে ঢুকেছেন</div>` : ''}
+        <button class="btn primary" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এক্সিট টাইম দিন</button>
       `;
     } else if(entry && entry.type === 'off'){
       el.innerHTML = `
@@ -562,6 +735,23 @@
   }
 
   // ---------- Day sheet ----------
+  let entryTimeValue = null; // 24hr "HH:MM" or null
+  let exitTimeValue = null;
+
+  function refreshTimeFieldUI(){
+    const eBtn = document.getElementById('entryTimeBtn');
+    const eLbl = document.getElementById('entryTimeLabel');
+    if(entryTimeValue){ eLbl.textContent = to12Hour(entryTimeValue); eBtn.classList.remove('empty'); }
+    else { eLbl.textContent = 'সময় নির্বাচন করুন'; eBtn.classList.add('empty'); }
+
+    const xBtn = document.getElementById('exitTimeBtn');
+    const xLbl = document.getElementById('exitTimeLabel');
+    if(exitTimeValue){ xLbl.textContent = to12Hour(exitTimeValue); xBtn.classList.remove('empty'); }
+    else { xLbl.textContent = 'এখনো দিইনি'; xBtn.classList.add('empty'); }
+
+    updateDurationHint();
+  }
+
   function openDaySheet(key){
     activeDate = key;
     const [y,m,d] = key.split('-').map(Number);
@@ -572,10 +762,10 @@
     activeMode = (entry && entry.type === 'off') ? 'off' : 'work';
     setTab(activeMode);
 
-    document.getElementById('entryTime').value = (entry && entry.type==='work') ? entry.entry : '';
-    document.getElementById('exitTime').value = (entry && entry.type==='work') ? entry.exit : '';
+    entryTimeValue = (entry && entry.type==='work') ? entry.entry : null;
+    exitTimeValue = (entry && entry.type==='work' && entry.exit) ? entry.exit : null;
+    refreshTimeFieldUI();
     document.getElementById('offLabel').value = (entry && entry.type==='off') ? (entry.label||'') : '';
-    updateDurationHint();
 
     document.getElementById('dayOverlay').classList.add('show');
   }
@@ -590,28 +780,45 @@
     document.getElementById('offFields').style.display = mode==='off' ? 'block':'none';
   }
   function updateDurationHint(){
-    const e = document.getElementById('entryTime').value;
-    const x = document.getElementById('exitTime').value;
     const hint = document.getElementById('durationHint');
-    const dur = durationLabel(e,x);
-    hint.textContent = dur ? ('মোট সময়: '+dur.label) : '';
+    if(entryTimeValue && exitTimeValue){
+      const dur = durationLabel(entryTimeValue, exitTimeValue);
+      hint.textContent = dur ? ('মোট সময়: '+dur.label) : '';
+    } else if(entryTimeValue && !exitTimeValue){
+      hint.textContent = 'শুধু এন্ট্রি টাইম দিলেও সংরক্ষণ হবে — এক্সিট টাইম পরে যোগ করতে পারবেন।';
+    } else {
+      hint.textContent = 'এন্ট্রি টাইম নির্বাচন করুন।';
+    }
   }
 
   document.querySelectorAll('.tab').forEach(t=>{
     t.addEventListener('click', ()=>setTab(t.dataset.mode));
   });
-  document.getElementById('entryTime').addEventListener('input', updateDurationHint);
-  document.getElementById('exitTime').addEventListener('input', updateDurationHint);
+  document.getElementById('entryTimeBtn').addEventListener('click', ()=>{
+    openTimePicker(entryTimeValue || settings.dutyStart, (val)=>{
+      entryTimeValue = val;
+      refreshTimeFieldUI();
+    });
+  });
+  document.getElementById('exitTimeBtn').addEventListener('click', ()=>{
+    openTimePicker(exitTimeValue || settings.dutyEnd, (val)=>{
+      exitTimeValue = val;
+      refreshTimeFieldUI();
+    });
+  });
+  document.getElementById('exitTimeClear').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    exitTimeValue = null;
+    refreshTimeFieldUI();
+  });
   document.getElementById('closeDaySheet').addEventListener('click', closeDaySheet);
   document.getElementById('dayOverlay').addEventListener('click', (e)=>{ if(e.target.id==='dayOverlay') closeDaySheet(); });
 
   document.getElementById('saveDayBtn').addEventListener('click', ()=>{
     if(!activeDate) return;
     if(activeMode === 'work'){
-      const en = document.getElementById('entryTime').value;
-      const ex = document.getElementById('exitTime').value;
-      if(!en || !ex){ toast('এন্ট্রি ও এক্সিট টাইম দুটোই দিন'); return; }
-      data[activeDate] = {type:'work', entry:en, exit:ex};
+      if(!entryTimeValue){ toast('এন্ট্রি টাইম নির্বাচন করুন'); return; }
+      data[activeDate] = {type:'work', entry:entryTimeValue, exit: exitTimeValue || null};
     } else {
       const lbl = document.getElementById('offLabel').value.trim();
       data[activeDate] = {type:'off', label: lbl};
@@ -661,6 +868,8 @@
   }
   document.getElementById('settingsBtn').addEventListener('click', ()=>{
     renderWeekgrid();
+    document.getElementById('dutyStartLabel').textContent = to12Hour(settings.dutyStart);
+    document.getElementById('dutyEndLabel').textContent = to12Hour(settings.dutyEnd);
     document.getElementById('settingsOverlay').classList.add('show');
   });
   document.getElementById('closeSettingsSheet').addEventListener('click', ()=>{
@@ -669,12 +878,168 @@
   document.getElementById('settingsOverlay').addEventListener('click', (e)=>{
     if(e.target.id==='settingsOverlay') e.currentTarget.classList.remove('show');
   });
+  document.getElementById('dutyStartBtn').addEventListener('click', ()=>{
+    openTimePicker(settings.dutyStart, (val)=>{
+      settings.dutyStart = val;
+      document.getElementById('dutyStartLabel').textContent = to12Hour(val);
+    });
+  });
+  document.getElementById('dutyEndBtn').addEventListener('click', ()=>{
+    openTimePicker(settings.dutyEnd, (val)=>{
+      settings.dutyEnd = val;
+      document.getElementById('dutyEndLabel').textContent = to12Hour(val);
+    });
+  });
   document.getElementById('saveSettingsBtn').addEventListener('click', ()=>{
     saveSettings();
     document.getElementById('settingsOverlay').classList.remove('show');
     renderAll();
     toast('সেটিংস সংরক্ষণ করা হয়েছে');
   });
+
+  // ---------- Analog clock time picker ----------
+  const TP_CENTER = 100;
+  let tpState = { hour12:9, minute:0, ampm:'AM', mode:'hour', callback:null, dragging:false };
+
+  function tpFrom24(str){
+    if(!str) return {hour12:9, minute:0, ampm:'AM'};
+    const [hh,mm] = str.split(':').map(Number);
+    const ampm = hh < 12 ? 'AM' : 'PM';
+    let hour12 = hh % 12; if(hour12===0) hour12 = 12;
+    return {hour12, minute:mm, ampm};
+  }
+  function tpTo24(hour12, minute, ampm){
+    let h = hour12 % 12;
+    if(ampm==='PM') h += 12;
+    return String(h).padStart(2,'0')+':'+String(minute).padStart(2,'0');
+  }
+  function tpPolar(angleDeg, radius){
+    const rad = (angleDeg * Math.PI) / 180;
+    return { x: TP_CENTER + radius*Math.sin(rad), y: TP_CENTER - radius*Math.cos(rad) };
+  }
+  function svgEl(tag, attrs){
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for(const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function tpBuildFace(){
+    const svg = document.getElementById('tpClockSvg');
+    svg.innerHTML = '';
+    svg.appendChild(svgEl('circle', {cx:100, cy:100, r:90, class:'tp-face'}));
+    const hand = svgEl('line', {id:'tpHand', x1:100, y1:100, x2:100, y2:30, class:'tp-hand'});
+    svg.appendChild(hand);
+    const knob = svgEl('circle', {id:'tpKnob', cx:100, cy:30, r:15, class:'tp-knob'});
+    svg.appendChild(knob);
+    svg.appendChild(svgEl('circle', {cx:100, cy:100, r:4, class:'tp-center'}));
+    for(let k=0;k<12;k++){
+      const pt = tpPolar(k*30, 70);
+      const text = svgEl('text', {x:pt.x, y:pt.y+5, class:'tp-num', 'data-k':k, 'text-anchor':'middle'});
+      svg.appendChild(text);
+    }
+  }
+  function tpUpdateNumbers(){
+    document.querySelectorAll('.tp-num').forEach(el=>{
+      const k = +el.getAttribute('data-k');
+      el.textContent = tpState.mode==='hour' ? (k===0 ? '12' : String(k)) : String(k*5).padStart(2,'0');
+    });
+  }
+  function tpUpdateHand(){
+    const angle = tpState.mode==='hour' ? (tpState.hour12%12)*30 : tpState.minute*6;
+    const pt = tpPolar(angle, 70);
+    document.getElementById('tpHand').setAttribute('x2', pt.x);
+    document.getElementById('tpHand').setAttribute('y2', pt.y);
+    document.getElementById('tpKnob').setAttribute('cx', pt.x);
+    document.getElementById('tpKnob').setAttribute('cy', pt.y);
+  }
+  function tpUpdateDigital(){
+    document.getElementById('tpHourDisplay').textContent = String(tpState.hour12).padStart(2,'0');
+    document.getElementById('tpMinuteDisplay').textContent = String(tpState.minute).padStart(2,'0');
+    document.getElementById('tpHourDisplay').classList.toggle('active', tpState.mode==='hour');
+    document.getElementById('tpMinuteDisplay').classList.toggle('active', tpState.mode==='minute');
+    document.getElementById('tpAM').classList.toggle('active', tpState.ampm==='AM');
+    document.getElementById('tpPM').classList.toggle('active', tpState.ampm==='PM');
+  }
+  function tpRenderAll(){
+    tpUpdateNumbers();
+    tpUpdateHand();
+    tpUpdateDigital();
+  }
+  function tpAngleFromEvent(e){
+    const svg = document.getElementById('tpClockSvg');
+    const rect = svg.getBoundingClientRect();
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    const x = (clientX - rect.left) / rect.width * 200;
+    const y = (clientY - rect.top) / rect.height * 200;
+    const dx = x - 100, dy = y - 100;
+    let angle = Math.atan2(dx, -dy) * 180 / Math.PI;
+    if(angle < 0) angle += 360;
+    return angle;
+  }
+  function tpHandlePoint(e){
+    const angle = tpAngleFromEvent(e);
+    if(tpState.mode === 'hour'){
+      let k = Math.round(angle/30) % 12;
+      tpState.hour12 = k===0 ? 12 : k;
+    } else {
+      let m = Math.round(angle/6) % 60;
+      tpState.minute = m;
+    }
+    tpRenderAll();
+  }
+  function tpPointerDown(e){
+    e.preventDefault();
+    tpState.dragging = true;
+    tpHandlePoint(e);
+  }
+  function tpPointerMove(e){
+    if(!tpState.dragging) return;
+    e.preventDefault();
+    tpHandlePoint(e);
+  }
+  function tpPointerUp(e){
+    if(!tpState.dragging) return;
+    tpState.dragging = false;
+    if(tpState.mode === 'hour'){
+      tpState.mode = 'minute';
+      tpRenderAll();
+    }
+  }
+  (function initClockOnce(){
+    tpBuildFace();
+    const svg = document.getElementById('tpClockSvg');
+    svg.addEventListener('pointerdown', tpPointerDown);
+    window.addEventListener('pointermove', tpPointerMove);
+    window.addEventListener('pointerup', tpPointerUp);
+  })();
+  document.getElementById('tpHourDisplay').addEventListener('click', ()=>{ tpState.mode='hour'; tpRenderAll(); });
+  document.getElementById('tpMinuteDisplay').addEventListener('click', ()=>{ tpState.mode='minute'; tpRenderAll(); });
+  document.getElementById('tpAM').addEventListener('click', ()=>{ tpState.ampm='AM'; tpRenderAll(); });
+  document.getElementById('tpPM').addEventListener('click', ()=>{ tpState.ampm='PM'; tpRenderAll(); });
+  document.getElementById('tpCancel').addEventListener('click', ()=>{
+    document.getElementById('tpOverlay').classList.remove('show');
+    tpState.callback = null;
+  });
+  document.getElementById('tpOk').addEventListener('click', ()=>{
+    const val = tpTo24(tpState.hour12, tpState.minute, tpState.ampm);
+    document.getElementById('tpOverlay').classList.remove('show');
+    if(tpState.callback) tpState.callback(val);
+    tpState.callback = null;
+  });
+  document.getElementById('tpOverlay').addEventListener('click', (e)=>{
+    if(e.target.id==='tpOverlay') document.getElementById('tpOverlay').classList.remove('show');
+  });
+
+  function openTimePicker(initial24, callback){
+    const parsed = tpFrom24(initial24);
+    tpState.hour12 = parsed.hour12;
+    tpState.minute = parsed.minute;
+    tpState.ampm = parsed.ampm;
+    tpState.mode = 'hour';
+    tpState.callback = callback;
+    tpRenderAll();
+    document.getElementById('tpOverlay').classList.add('show');
+  }
 
   // ---------- PDF export ----------
   // NOTE: jsPDF's built-in fonts only contain Latin glyphs. Bengali text would
@@ -702,31 +1067,42 @@
     doc.text('Exported: ' + new Date().toLocaleString('en-US'), 14, 22);
 
     const rows = [];
-    let totalMin = 0, present=0, missed=0, off=0;
+    let totalMin = 0, present=0, missed=0, off=0, weekend=0, late=0, early=0;
     for(let d=1; d<=daysInMonth; d++){
       const info = getDayStatus(viewYear, viewMonth, d);
       const dObj = new Date(viewYear, viewMonth, d);
       const wd = WD_EN[dObj.getDay()];
-      let statusLabel = '', entryT='-', exitT='-', durT='-';
+      let statusLabel = '', entryT='-', exitT='-', durT='-', flagT='-';
+      const flags = getFlags(info.entry);
+
       if(info.status==='worked'){
         statusLabel='Present'; present++;
-        entryT = info.entry.entry; exitT = info.entry.exit;
+        entryT = to12Hour(info.entry.entry); exitT = to12Hour(info.entry.exit);
         const dur = durationLabel(info.entry.entry, info.entry.exit);
         if(dur){ durT = dur.hours+'h '+dur.minutes+'m'; totalMin += dur.totalMinutes; }
+        const fl = [];
+        if(flags.late){ fl.push('Late'); late++; }
+        if(flags.early){ fl.push('Early Left'); early++; }
+        flagT = fl.length ? fl.join(', ') : '-';
+      } else if(info.status==='in-progress' || info.status==='incomplete'){
+        statusLabel = info.status==='in-progress' ? 'Present (ongoing)' : 'Present (no exit logged)';
+        present++;
+        entryT = to12Hour(info.entry.entry);
+        if(flags.late){ flagT='Late'; late++; }
       } else if(info.status==='missed'){ statusLabel='Missed'; missed++; }
       else if(info.status==='off'){
         const reason = info.entry ? offLabelToAscii(info.entry.label) : '';
         statusLabel='Off/Holiday' + (reason ? ' - '+reason : '');
         off++;
       }
-      else if(info.status==='weekend'){ statusLabel='Weekend'; }
+      else if(info.status==='weekend'){ statusLabel='Weekend'; weekend++; }
       else if(info.status==='future'){ statusLabel='-'; }
       else if(info.status==='today-pending'){ statusLabel='Pending'; }
-      rows.push([d+' ('+wd+')', statusLabel, entryT, exitT, durT]);
+      rows.push([d+' ('+wd+')', statusLabel, entryT, exitT, durT, flagT]);
     }
 
     doc.autoTable({
-      head: [['Date','Status','Entry','Exit','Duration']],
+      head: [['Date','Status','Entry','Exit','Duration','Flags']],
       body: rows,
       startY: 28,
       styles:{fontSize:8, font:'helvetica'},
@@ -735,7 +1111,8 @@
 
     const finalY = doc.lastAutoTable.finalY + 10;
     doc.setFontSize(10);
-    doc.text('Present: '+present+'   Missed: '+missed+'   Off: '+off+'   Total hours: '+(totalMin/60).toFixed(1), 14, finalY);
+    doc.text('Present: '+present+'   Missed: '+missed+'   Off: '+off+'   Weekends: '+weekend, 14, finalY);
+    doc.text('Total hours: '+(totalMin/60).toFixed(1)+'   Late: '+late+'   Early Leave: '+early, 14, finalY+7);
 
     doc.save('duty-log-'+viewYear+'-'+String(viewMonth+1).padStart(2,'0')+'.pdf');
     toast('PDF ডাউনলোড হচ্ছে');
@@ -773,6 +1150,8 @@
         }
         if(parsed.settings && Array.isArray(parsed.settings.weekend)){
           settings = parsed.settings;
+          if(!settings.dutyStart) settings.dutyStart = '09:00';
+          if(!settings.dutyEnd) settings.dutyEnd = '17:00';
           saveSettings();
         }
         saveData();
