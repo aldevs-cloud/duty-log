@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ডিউটি লগ · Duty Log</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%232F7A6B%22/><rect x=%2247%22 y=%2222%22 width=%226%22 height=%2230%22 rx=%223%22 fill=%22%23F5F6F4%22/><rect x=%2250%22 y=%2248%22 width=%2222%22 height=%226%22 rx=%223%22 fill=%22%23F5F6F4%22 transform=%22rotate(35 50 50)%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EEF3F1;
+    --paper-raised:#FFFFFF;
+    --ink:#152420;
+    --ink-soft:#4B5B56;
+    --line:#D8E1DD;
+    --teal:#2F7A6B;
+    --teal-soft:#E1F0EB;
+    --rust:#C1502E;
+    --rust-soft:#FBE7E0;
+    --gold:#B98A2E;
+    --gold-soft:#F7EDD9;
+    --navy:#2C4A6E;
+    --navy-soft:#E4EBF3;
+    --shadow: 0 1px 2px rgba(21,36,32,0.04), 0 6px 20px rgba(21,36,32,0.06);
+    --radius: 14px;
+    --font-display:'Space Grotesk', 'Noto Sans Bengali', sans-serif;
+    --font-body:'Noto Sans Bengali', 'Space Grotesk', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  ::selection{background:var(--teal-soft);}
+  a{color:inherit;}
+
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 0;}
+
+  /* ---------- Header ---------- */
+  header.app{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .mark{
+    width:38px;height:38px;border-radius:10px;background:var(--teal);
+    position:relative;flex-shrink:0;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.12);
+  }
+  .brand .mark::before,.brand .mark::after{
+    content:'';position:absolute;background:var(--paper);border-radius:2px;
+  }
+  .brand .mark::before{width:3px;height:14px;left:17.5px;top:8px;}
+  .brand .mark::after{width:10px;height:3px;left:19px;top:19px;transform:rotate(35deg);transform-origin:left center;}
+  .brand h1{
+    font-family:var(--font-display);font-size:19px;font-weight:700;margin:0;line-height:1.1;
+    letter-spacing:-0.01em;
+  }
+  .brand small{display:block;color:var(--ink-soft);font-size:12px;font-weight:500;margin-top:1px;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:10px;border:1px solid var(--line);
+    background:var(--paper-raised);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink-soft);
+  }
+  .icon-btn:hover{border-color:var(--teal);color:var(--teal);}
+  .icon-btn svg{width:18px;height:18px;}
+
+  /* ---------- Punch-card frame ---------- */
+  .card{
+    background:var(--paper-raised);border-radius:var(--radius);
+    box-shadow:var(--shadow);position:relative;
+    padding:18px 18px 18px 26px;margin-bottom:16px;
+    border:1px solid var(--line);
+  }
+  .card::before{
+    content:'';position:absolute;left:9px;top:16px;bottom:16px;width:1px;
+    background:repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 13px);
+  }
+  .card .punchdot{
+    position:absolute;left:5px;width:9px;height:9px;border-radius:50%;
+    background:var(--paper);border:1.5px solid var(--line);
+  }
+
+  /* ---------- Stat strip ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+  .stat{
+    background:var(--paper-raised);border:1px solid var(--line);border-radius:12px;
+    padding:12px 10px;text-align:center;box-shadow:var(--shadow);
+  }
+  .stat .num{font-family:var(--font-mono);font-size:20px;font-weight:600;line-height:1;}
+  .stat .lbl{font-size:11px;color:var(--ink-soft);margin-top:6px;font-weight:500;}
+  .stat.present .num{color:var(--teal);}
+  .stat.missed .num{color:var(--rust);}
+  .stat.off .num{color:var(--gold);}
+  .stat.hours .num{color:var(--navy);}
+
+  /* ---------- Month nav ---------- */
+  .monthbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .monthbar h2{font-family:var(--font-display);font-size:16px;font-weight:600;margin:0;}
+  .monthbar .navbtns{display:flex;gap:6px;}
+  .navbtn{
+    width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--paper-raised);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);
+  }
+  .navbtn:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* ---------- Calendar ---------- */
+  .weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;}
+  .weekdays span{
+    text-align:center;font-size:11px;color:var(--ink-soft);font-weight:600;
+  }
+  .weekdays span.weekend{color:var(--gold);}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .day{
+    aspect-ratio:1/1;border-radius:9px;border:1px solid var(--line);background:var(--paper-raised);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    cursor:pointer;position:relative;padding:2px;min-height:44px;
+  }
+  .day:hover{border-color:var(--teal);}
+  .day.empty{visibility:hidden;pointer-events:none;}
+  .day .dnum{font-family:var(--font-mono);font-size:13px;font-weight:500;}
+  .day .dsub{font-size:9px;font-family:var(--font-mono);color:var(--ink-soft);}
+  .day.worked{background:var(--teal-soft);border-color:var(--teal);}
+  .day.worked .dnum{color:var(--teal);}
+  .day.missed{background:var(--rust-soft);border-color:var(--rust);}
+  .day.missed .dnum{color:var(--rust);}
+  .day.off{background:var(--gold-soft);border-color:var(--gold);}
+  .day.off .dnum{color:var(--gold);}
+  .day.weekend:not(.worked):not(.off):not(.missed){background:#F5F5F3;}
+  .day.future{opacity:0.55;}
+  .day.today{box-shadow:0 0 0 2px var(--navy) inset;}
+  .day .dot{position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--navy);}
+
+  .legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:11px;color:var(--ink-soft);}
+  .legend span{display:flex;align-items:center;gap:5px;}
+  .legend i{width:9px;height:9px;border-radius:3px;display:inline-block;}
+
+  /* ---------- Buttons row ---------- */
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .btn{
+    flex:1;min-width:120px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--paper-raised);font-family:var(--font-body);font-size:13px;font-weight:600;
+    cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .btn:hover{border-color:var(--teal);color:var(--teal);}
+  .btn.primary{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .btn.primary:hover{opacity:0.92;color:#fff;}
+  .btn.danger:hover{border-color:var(--rust);color:var(--rust);}
+  .btn svg{width:15px;height:15px;}
+
+  /* ---------- Modal ---------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(21,36,32,0.45);display:none;
+    align-items:flex-end;justify-content:center;z-index:50;padding:0;
+  }
+  .overlay.show{display:flex;}
+  @media(min-width:600px){
+    .overlay{align-items:center;}
+  }
+  .sheet{
+    background:var(--paper-raised);width:100%;max-width:460px;border-radius:18px 18px 0 0;
+    padding:20px 20px 24px;box-shadow:0 -10px 40px rgba(0,0,0,0.2);
+    max-height:90vh;overflow-y:auto;
+  }
+  @media(min-width:600px){
+    .sheet{border-radius:18px;margin-bottom:20px;}
+  }
+  .sheet h3{font-family:var(--font-display);margin:0 0 2px;font-size:17px;}
+  .sheet .subdate{color:var(--ink-soft);font-size:12px;margin-bottom:16px;font-family:var(--font-mono);}
+  .tabs{display:flex;gap:6px;margin-bottom:16px;background:var(--paper);padding:4px;border-radius:10px;}
+  .tab{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink-soft);}
+  .tab.active{background:var(--paper-raised);color:var(--ink);box-shadow:var(--shadow);}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+  .field input[type=time], .field input[type=text], .field select{
+    width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
+    font-family:var(--font-mono);font-size:14px;background:var(--paper);color:var(--ink);
+  }
+  .field select{font-family:var(--font-body);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .sheet-actions{display:flex;gap:8px;margin-top:6px;}
+  .hint{font-size:11px;color:var(--ink-soft);margin-top:-6px;margin-bottom:14px;}
+  .close-x{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--ink-soft);cursor:pointer;padding:4px;}
+
+  /* settings */
+  .weekgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px;}
+  .wchip{
+    text-align:center;padding:9px 0;border-radius:9px;border:1px solid var(--line);
+    font-size:11px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:var(--paper);
+  }
+  .wchip.active{background:var(--gold-soft);border-color:var(--gold);color:var(--gold);}
+
+  footer.note{
+    text-align:center;color:var(--ink-soft);font-size:11px;margin-top:22px;line-height:1.6;padding:0 20px;
+  }
+  #toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:10px;font-size:13px;
+    opacity:0;pointer-events:none;transition:all 0.25s ease;z-index:100;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="app">
+    <div class="brand">
+      <div class="mark"></div>
+      <div>
+        <h1>ডিউটি লগ</h1>
+        <small>Duty Log — অফিস উপস্থিতি ট্র্যাকার</small>
+      </div>
+    </div>
+    <button class="icon-btn" id="settingsBtn" title="সেটিংস">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 005 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.14.31.22.65.22 1s-.08.69-.22 1z"/></svg>
+    </button>
+  </header>
+
+  <!-- Today status card -->
+  <div class="card" id="todayCard">
+    <span class="punchdot" style="top:16px;"></span>
+    <span class="punchdot" style="top:29px;"></span>
+    <span class="punchdot" style="bottom:16px;"></span>
+    <div id="todayContent"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat present"><div class="num" id="statPresent">0</div><div class="lbl">উপস্থিত</div></div>
+    <div class="stat missed"><div class="num" id="statMissed">0</div><div class="lbl">অনুপস্থিত</div></div>
+    <div class="stat off"><div class="num" id="statOff">0</div><div class="lbl">ছুটি</div></div>
+    <div class="stat hours"><div class="num" id="statHours">0</div><div class="lbl">মোট ঘণ্টা</div></div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="card">
+    <span class="punchdot" style="top:16px;"></span>
+    <span class="punchdot" style="top:29px;"></span>
+    <span class="punchdot" style="bottom:16px;"></span>
+    <div class="monthbar">
+      <div class="navbtns">
+        <div class="navbtn" id="prevMonth">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+      </div>
+      <h2 id="monthLabel">—</h2>
+      <div class="navbtns">
+        <div class="navbtn" id="nextMonth">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="weekdays" id="weekdayLabels"></div>
+    <div class="grid" id="calGrid"></div>
+    <div class="legend">
+      <span><i style="background:var(--teal)"></i> ডিউটি করা হয়েছে</span>
+      <span><i style="background:var(--rust)"></i> অনুপস্থিত</span>
+      <span><i style="background:var(--gold)"></i> ছুটি / বন্ধ</span>
+      <span><i style="background:#D9D9D6"></i> সাপ্তাহিক ছুটি</span>
+    </div>
+  </div>
+
+  <!-- Export / backup -->
+  <div class="card">
+    <span class="punchdot" style="top:16px;"></span>
+    <span class="punchdot" style="top:29px;"></span>
+    <span class="punchdot" style="bottom:16px;"></span>
+    <div style="font-weight:600;font-size:13px;margin-bottom:10px;">ব্যাকআপ ও এক্সপোর্ট</div>
+    <div class="actions">
+      <button class="btn" id="exportPdfBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+        এই মাসের PDF
+      </button>
+      <button class="btn" id="exportJsonBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+        JSON ব্যাকআপ
+      </button>
+      <button class="btn" id="importJsonBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+        JSON ইমপোর্ট
+      </button>
+      <input type="file" id="importFile" accept="application/json" style="display:none;">
+    </div>
+  </div>
+
+  <footer class="note">
+    সব ডেটা শুধু আপনার এই ব্রাউজারে সংরক্ষিত হয় (কোনো সার্ভার/ডাটাবেস নেই)।
+    ব্রাউজার ডেটা মুছলে বা অ্যাপ আনইনস্টল করলে এই ডেটা হারিয়ে যাবে —
+    তাই মাঝে মাঝে "JSON ব্যাকআপ" নিয়ে রাখুন, অন্য ব্রাউজার/ডিভাইসে কাজ করতে সেই ফাইল ইমপোর্ট করুন।
+  </footer>
+</div>
+
+<!-- Day entry modal -->
+<div class="overlay" id="dayOverlay">
+  <div class="sheet">
+    <button class="close-x" id="closeDaySheet">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h3>দিনের এন্ট্রি</h3>
+    <div class="subdate" id="sheetDate"></div>
+
+    <div class="tabs">
+      <div class="tab active" data-mode="work">ডিউটি টাইম</div>
+      <div class="tab" data-mode="off">ছুটি / বন্ধ</div>
+    </div>
+
+    <div id="workFields">
+      <div class="row2">
+        <div class="field">
+          <label>এন্ট্রি টাইম</label>
+          <input type="time" id="entryTime">
+        </div>
+        <div class="field">
+          <label>এক্সিট টাইম</label>
+          <input type="time" id="exitTime">
+        </div>
+      </div>
+      <div class="hint" id="durationHint"></div>
+    </div>
+
+    <div id="offFields" style="display:none;">
+      <div class="field">
+        <label>কারণ (ঐচ্ছিক)</label>
+        <input type="text" id="offLabel" placeholder="যেমনঃ ঈদের ছুটি, অসুস্থতা, ব্যক্তিগত ছুটি">
+      </div>
+    </div>
+
+    <div class="sheet-actions">
+      <button class="btn danger" id="clearDayBtn">মুছে ফেলুন</button>
+      <button class="btn primary" id="saveDayBtn">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div class="overlay" id="settingsOverlay">
+  <div class="sheet">
+    <button class="close-x" id="closeSettingsSheet">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <h3>সেটিংস</h3>
+    <div class="subdate">সাপ্তাহিক ছুটির দিন নির্বাচন করুন</div>
+    <div class="weekgrid" id="weekgrid"></div>
+    <div class="hint">নির্বাচিত দিনগুলোতে এন্ট্রি না দিলে "অনুপস্থিত" হিসেবে দেখাবে না।</div>
+    <div class="sheet-actions">
+      <button class="btn primary" id="saveSettingsBtn" style="width:100%;">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  const DATA_KEY = 'dutylog_data_v1';
+  const SETTINGS_KEY = 'dutylog_settings_v1';
+  const WD_BN = ['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
+  const MONTH_BN = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+
+  let data = loadData();
+  let settings = loadSettings();
+  let viewYear, viewMonth; // 0-indexed month
+  let activeDate = null;
+  let activeMode = 'work';
+
+  const todayD = new Date();
+  viewYear = todayD.getFullYear();
+  viewMonth = todayD.getMonth();
+
+  function loadData(){
+    try{ return JSON.parse(localStorage.getItem(DATA_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function saveData(){ localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
+  function loadSettings(){
+    try{
+      const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+      if(s && Array.isArray(s.weekend)) return s;
+    }catch(e){}
+    return { weekend: [5,6] }; // default Friday-Saturday (Bangladesh)
+  }
+  function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
+
+  function fmtDateKey(y,m,d){
+    return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+  }
+  function todayKey(){ const t=new Date(); return fmtDateKey(t.getFullYear(), t.getMonth(), t.getDate()); }
+
+  function toast(msg){
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(()=>el.classList.remove('show'), 2200);
+  }
+
+  function timeToMinutes(t){
+    if(!t) return null;
+    const [h,m] = t.split(':').map(Number);
+    return h*60+m;
+  }
+  function durationLabel(entry, exit){
+    const a = timeToMinutes(entry), b = timeToMinutes(exit);
+    if(a==null || b==null) return null;
+    let diff = b - a;
+    if(diff < 0) diff += 24*60; // overnight shift fallback
+    const h = Math.floor(diff/60), m = diff%60;
+    return {hours:h, minutes:m, totalMinutes:diff, label: h+' ঘ ' + m + ' মি'};
+  }
+
+  function isWeekend(dateObj){
+    return settings.weekend.includes(dateObj.getDay());
+  }
+
+  function getDayStatus(y,m,d){
+    const key = fmtDateKey(y,m,d);
+    const dObj = new Date(y,m,d);
+    const entry = data[key];
+    const isToday = key === todayKey();
+    const isFuture = dObj > new Date(new Date().setHours(0,0,0,0));
+
+    if(entry && entry.type === 'work'){
+      return {status:'worked', key, entry};
+    }
+    if(entry && entry.type === 'off'){
+      return {status:'off', key, entry};
+    }
+    if(isFuture){
+      return {status:'future', key, entry:null};
+    }
+    if(isWeekend(dObj)){
+      return {status:'weekend', key, entry:null};
+    }
+    if(isToday){
+      return {status:'today-pending', key, entry:null};
+    }
+    return {status:'missed', key, entry:null};
+  }
+
+  // ---------- Rendering ----------
+  function renderWeekdayLabels(){
+    const wrap = document.getElementById('weekdayLabels');
+    wrap.innerHTML = '';
+    WD_BN.forEach((w,i)=>{
+      const s = document.createElement('span');
+      s.textContent = w;
+      if(settings.weekend.includes(i)) s.classList.add('weekend');
+      wrap.appendChild(s);
+    });
+  }
+
+  function renderCalendar(){
+    document.getElementById('monthLabel').textContent = MONTH_BN[viewMonth] + ' ' + viewYear;
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+
+    for(let i=0;i<firstDay;i++){
+      const e = document.createElement('div');
+      e.className = 'day empty';
+      grid.appendChild(e);
+    }
+    for(let d=1; d<=daysInMonth; d++){
+      const info = getDayStatus(viewYear, viewMonth, d);
+      const cell = document.createElement('div');
+      cell.className = 'day ' + info.status.replace('-pending','');
+      if(info.key === todayKey()) cell.classList.add('today');
+      const num = document.createElement('div');
+      num.className = 'dnum';
+      num.textContent = d;
+      cell.appendChild(num);
+      if(info.status === 'worked'){
+        const dur = durationLabel(info.entry.entry, info.entry.exit);
+        const sub = document.createElement('div');
+        sub.className = 'dsub';
+        sub.textContent = dur ? dur.hours+'.'+String(Math.round(dur.minutes/60*10)).padStart(1,'0')+'ঘ' : '';
+        cell.appendChild(sub);
+      }
+      if(info.status === 'today-pending'){
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        cell.appendChild(dot);
+      }
+      cell.addEventListener('click', ()=>openDaySheet(info.key));
+      grid.appendChild(cell);
+    }
+  }
+
+  function renderStats(){
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    let present=0, missed=0, off=0, totalMin=0;
+    for(let d=1; d<=daysInMonth; d++){
+      const info = getDayStatus(viewYear, viewMonth, d);
+      if(info.status==='worked'){
+        present++;
+        const dur = durationLabel(info.entry.entry, info.entry.exit);
+        if(dur) totalMin += dur.totalMinutes;
+      } else if(info.status==='missed'){
+        missed++;
+      } else if(info.status==='off'){
+        off++;
+      }
+    }
+    document.getElementById('statPresent').textContent = present;
+    document.getElementById('statMissed').textContent = missed;
+    document.getElementById('statOff').textContent = off;
+    document.getElementById('statHours').textContent = (totalMin/60).toFixed(1);
+  }
+
+  function renderTodayCard(){
+    const key = todayKey();
+    const entry = data[key];
+    const el = document.getElementById('todayContent');
+    const now = new Date();
+    const dateStr = now.getDate()+' '+MONTH_BN[now.getMonth()]+' '+now.getFullYear();
+
+    if(entry && entry.type === 'work'){
+      const dur = durationLabel(entry.entry, entry.exit);
+      el.innerHTML = `
+        <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
+        <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
+          <div style="font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--teal);">${dur? dur.label : '—'}</div>
+          <div style="font-size:12px;color:var(--ink-soft);">ডিউটি করেছেন আজ</div>
+        </div>
+        <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">${entry.entry} → ${entry.exit}</div>
+        <button class="btn" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এডিট করুন</button>
+      `;
+    } else if(entry && entry.type === 'off'){
+      el.innerHTML = `
+        <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
+        <div style="font-size:16px;font-weight:600;color:var(--gold);">আজ ছুটির দিন${entry.label? ' — '+entry.label : ''}</div>
+        <button class="btn" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এডিট করুন</button>
+      `;
+    } else {
+      el.innerHTML = `
+        <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
+        <div style="font-size:16px;font-weight:600;">আজকের এন্ট্রি এখনো দেওয়া হয়নি</div>
+        <button class="btn primary" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এন্ট্রি দিন</button>
+      `;
+    }
+  }
+  window.addEventListener('openToday', ()=>openDaySheet(todayKey()));
+
+  function renderAll(){
+    renderWeekdayLabels();
+    renderCalendar();
+    renderStats();
+    renderTodayCard();
+  }
+
+  // ---------- Day sheet ----------
+  function openDaySheet(key){
+    activeDate = key;
+    const [y,m,d] = key.split('-').map(Number);
+    const dObj = new Date(y, m-1, d);
+    document.getElementById('sheetDate').textContent = d+' '+MONTH_BN[m-1]+' '+y+' · '+WD_BN[dObj.getDay()]+'বার';
+
+    const entry = data[key];
+    activeMode = (entry && entry.type === 'off') ? 'off' : 'work';
+    setTab(activeMode);
+
+    document.getElementById('entryTime').value = (entry && entry.type==='work') ? entry.entry : '';
+    document.getElementById('exitTime').value = (entry && entry.type==='work') ? entry.exit : '';
+    document.getElementById('offLabel').value = (entry && entry.type==='off') ? (entry.label||'') : '';
+    updateDurationHint();
+
+    document.getElementById('dayOverlay').classList.add('show');
+  }
+  function closeDaySheet(){
+    document.getElementById('dayOverlay').classList.remove('show');
+    activeDate = null;
+  }
+  function setTab(mode){
+    activeMode = mode;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.mode===mode));
+    document.getElementById('workFields').style.display = mode==='work' ? 'block':'none';
+    document.getElementById('offFields').style.display = mode==='off' ? 'block':'none';
+  }
+  function updateDurationHint(){
+    const e = document.getElementById('entryTime').value;
+    const x = document.getElementById('exitTime').value;
+    const hint = document.getElementById('durationHint');
+    const dur = durationLabel(e,x);
+    hint.textContent = dur ? ('মোট সময়: '+dur.label) : '';
+  }
+
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click', ()=>setTab(t.dataset.mode));
+  });
+  document.getElementById('entryTime').addEventListener('input', updateDurationHint);
+  document.getElementById('exitTime').addEventListener('input', updateDurationHint);
+  document.getElementById('closeDaySheet').addEventListener('click', closeDaySheet);
+  document.getElementById('dayOverlay').addEventListener('click', (e)=>{ if(e.target.id==='dayOverlay') closeDaySheet(); });
+
+  document.getElementById('saveDayBtn').addEventListener('click', ()=>{
+    if(!activeDate) return;
+    if(activeMode === 'work'){
+      const en = document.getElementById('entryTime').value;
+      const ex = document.getElementById('exitTime').value;
+      if(!en || !ex){ toast('এন্ট্রি ও এক্সিট টাইম দুটোই দিন'); return; }
+      data[activeDate] = {type:'work', entry:en, exit:ex};
+    } else {
+      const lbl = document.getElementById('offLabel').value.trim();
+      data[activeDate] = {type:'off', label: lbl};
+    }
+    saveData();
+    renderAll();
+    closeDaySheet();
+    toast('সংরক্ষণ করা হয়েছে');
+  });
+
+  document.getElementById('clearDayBtn').addEventListener('click', ()=>{
+    if(!activeDate) return;
+    delete data[activeDate];
+    saveData();
+    renderAll();
+    closeDaySheet();
+    toast('মুছে ফেলা হয়েছে');
+  });
+
+  // ---------- Month navigation ----------
+  document.getElementById('prevMonth').addEventListener('click', ()=>{
+    viewMonth--; if(viewMonth<0){viewMonth=11; viewYear--;}
+    renderAll();
+  });
+  document.getElementById('nextMonth').addEventListener('click', ()=>{
+    viewMonth++; if(viewMonth>11){viewMonth=0; viewYear++;}
+    renderAll();
+  });
+
+  // ---------- Settings ----------
+  function renderWeekgrid(){
+    const wrap = document.getElementById('weekgrid');
+    wrap.innerHTML = '';
+    WD_BN.forEach((w,i)=>{
+      const c = document.createElement('div');
+      c.className = 'wchip' + (settings.weekend.includes(i) ? ' active':'');
+      c.textContent = w;
+      c.dataset.idx = i;
+      c.addEventListener('click', ()=>{
+        const idx = i;
+        const pos = settings.weekend.indexOf(idx);
+        if(pos>-1) settings.weekend.splice(pos,1); else settings.weekend.push(idx);
+        renderWeekgrid();
+      });
+      wrap.appendChild(c);
+    });
+  }
+  document.getElementById('settingsBtn').addEventListener('click', ()=>{
+    renderWeekgrid();
+    document.getElementById('settingsOverlay').classList.add('show');
+  });
+  document.getElementById('closeSettingsSheet').addEventListener('click', ()=>{
+    document.getElementById('settingsOverlay').classList.remove('show');
+  });
+  document.getElementById('settingsOverlay').addEventListener('click', (e)=>{
+    if(e.target.id==='settingsOverlay') e.currentTarget.classList.remove('show');
+  });
+  document.getElementById('saveSettingsBtn').addEventListener('click', ()=>{
+    saveSettings();
+    document.getElementById('settingsOverlay').classList.remove('show');
+    renderAll();
+    toast('সেটিংস সংরক্ষণ করা হয়েছে');
+  });
+
+  // ---------- PDF export ----------
+  // NOTE: jsPDF's built-in fonts only contain Latin glyphs. Bengali text would
+  // render as garbled boxes, so the PDF itself is generated in English only.
+  const MONTH_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const WD_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  function offLabelToAscii(label){
+    if(!label) return '';
+    // Strip any non-ASCII characters (e.g. Bengali reason text) to avoid
+    // garbled output; keep numbers/Latin letters/punctuation if present.
+    const ascii = label.replace(/[^\x00-\x7F]/g, '').trim();
+    return ascii || '(reason in Bangla - see app)';
+  }
+
+  document.getElementById('exportPdfBtn').addEventListener('click', ()=>{
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(14);
+    doc.text('Duty Log - ' + MONTH_EN[viewMonth] + ' ' + viewYear, 14, 16);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(9);
+    doc.text('Exported: ' + new Date().toLocaleString('en-US'), 14, 22);
+
+    const rows = [];
+    let totalMin = 0, present=0, missed=0, off=0;
+    for(let d=1; d<=daysInMonth; d++){
+      const info = getDayStatus(viewYear, viewMonth, d);
+      const dObj = new Date(viewYear, viewMonth, d);
+      const wd = WD_EN[dObj.getDay()];
+      let statusLabel = '', entryT='-', exitT='-', durT='-';
+      if(info.status==='worked'){
+        statusLabel='Present'; present++;
+        entryT = info.entry.entry; exitT = info.entry.exit;
+        const dur = durationLabel(info.entry.entry, info.entry.exit);
+        if(dur){ durT = dur.hours+'h '+dur.minutes+'m'; totalMin += dur.totalMinutes; }
+      } else if(info.status==='missed'){ statusLabel='Missed'; missed++; }
+      else if(info.status==='off'){
+        const reason = info.entry ? offLabelToAscii(info.entry.label) : '';
+        statusLabel='Off/Holiday' + (reason ? ' - '+reason : '');
+        off++;
+      }
+      else if(info.status==='weekend'){ statusLabel='Weekend'; }
+      else if(info.status==='future'){ statusLabel='-'; }
+      else if(info.status==='today-pending'){ statusLabel='Pending'; }
+      rows.push([d+' ('+wd+')', statusLabel, entryT, exitT, durT]);
+    }
+
+    doc.autoTable({
+      head: [['Date','Status','Entry','Exit','Duration']],
+      body: rows,
+      startY: 28,
+      styles:{fontSize:8, font:'helvetica'},
+      headStyles:{fillColor:[47,122,107]}
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 10;
+    doc.setFontSize(10);
+    doc.text('Present: '+present+'   Missed: '+missed+'   Off: '+off+'   Total hours: '+(totalMin/60).toFixed(1), 14, finalY);
+
+    doc.save('duty-log-'+viewYear+'-'+String(viewMonth+1).padStart(2,'0')+'.pdf');
+    toast('PDF ডাউনলোড হচ্ছে');
+  });
+
+  // ---------- JSON export / import ----------
+  document.getElementById('exportJsonBtn').addEventListener('click', ()=>{
+    const payload = { data, settings, exportedAt: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'dutylog-backup-'+todayKey()+'.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('JSON ব্যাকআপ ডাউনলোড হয়েছে');
+  });
+
+  document.getElementById('importJsonBtn').addEventListener('click', ()=>{
+    document.getElementById('importFile').click();
+  });
+  document.getElementById('importFile').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt)=>{
+      try{
+        const parsed = JSON.parse(evt.target.result);
+        const incoming = parsed.data || parsed; // support raw data-only files too
+        const doMerge = confirm('এই ব্রাউজারে আগে থেকে থাকা ডেটার সাথে নতুন ডেটা যোগ (merge) করতে চান?\n\nOK = বর্তমান ডেটার সাথে যোগ হবে (একই তারিখ থাকলে নতুনটা বসবে)\nCancel = বর্তমান সব ডেটা মুছে শুধু ইমপোর্ট করা ডেটা থাকবে');
+        if(doMerge){
+          data = Object.assign({}, data, incoming);
+        } else {
+          data = incoming;
+        }
+        if(parsed.settings && Array.isArray(parsed.settings.weekend)){
+          settings = parsed.settings;
+          saveSettings();
+        }
+        saveData();
+        renderAll();
+        toast('ইমপোর্ট সম্পন্ন হয়েছে');
+      }catch(err){
+        toast('ফাইলটি সঠিক নয়');
+      }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
