@@ -686,14 +686,6 @@
   function stopDutyTimer(){
     if(dutyTimerInterval){ clearInterval(dutyTimerInterval); dutyTimerInterval = null; }
   }
-  function dutyDurationMinutes(){
-    const startMin = timeToMinutes(settings.dutyStart);
-    const endMin = timeToMinutes(settings.dutyEnd);
-    if(startMin==null || endMin==null) return null;
-    let diff = endMin - startMin;
-    if(diff <= 0) diff += 24*60; // overnight duty
-    return diff;
-  }
   function formatHMS(totalSeconds){
     const abs = Math.max(0, Math.floor(totalSeconds));
     const h = Math.floor(abs/3600);
@@ -706,12 +698,14 @@
     const valEl = document.getElementById('dutyTimerVal');
     const lblEl = document.getElementById('dutyTimerLbl');
     if(!valEl){ stopDutyTimer(); return; }
-    const durMin = dutyDurationMinutes();
-    if(durMin==null || !entryTime24){ valEl.textContent = '—'; return; }
+    if(!settings.dutyEnd || !entryTime24){ valEl.textContent = '—'; return; }
     const [eh, em] = entryTime24.split(':').map(Number);
+    const [xh, xm] = settings.dutyEnd.split(':').map(Number);
     const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0, 0);
-    const target = new Date(start.getTime() + durMin*60000);
+    const entryDt = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0, 0);
+    let target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), xh, xm, 0, 0);
+    // overnight duty: end-clock time falls before entry-clock time, so it's on the next day
+    if(target <= entryDt) target = new Date(target.getTime() + 24*60*60000);
     const remainingMs = target - now;
     if(remainingMs > 0){
       lblEl.textContent = 'ডিউটি শেষ হতে বাকি';
