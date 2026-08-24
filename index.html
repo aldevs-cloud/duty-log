@@ -681,6 +681,54 @@
     document.getElementById('statEarly').textContent = early;
   }
 
+  // ---------- Duty countdown timer ----------
+  let dutyTimerInterval = null;
+  function stopDutyTimer(){
+    if(dutyTimerInterval){ clearInterval(dutyTimerInterval); dutyTimerInterval = null; }
+  }
+  function dutyDurationMinutes(){
+    const startMin = timeToMinutes(settings.dutyStart);
+    const endMin = timeToMinutes(settings.dutyEnd);
+    if(startMin==null || endMin==null) return null;
+    let diff = endMin - startMin;
+    if(diff <= 0) diff += 24*60; // overnight duty
+    return diff;
+  }
+  function formatHMS(totalSeconds){
+    const abs = Math.max(0, Math.floor(totalSeconds));
+    const h = Math.floor(abs/3600);
+    const m = Math.floor((abs%3600)/60);
+    const s = abs%60;
+    const pad = n=>String(n).padStart(2,'0');
+    return pad(h)+':'+pad(m)+':'+pad(s);
+  }
+  function updateDutyTimer(entryTime24){
+    const valEl = document.getElementById('dutyTimerVal');
+    const lblEl = document.getElementById('dutyTimerLbl');
+    if(!valEl){ stopDutyTimer(); return; }
+    const durMin = dutyDurationMinutes();
+    if(durMin==null || !entryTime24){ valEl.textContent = '—'; return; }
+    const [eh, em] = entryTime24.split(':').map(Number);
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0, 0);
+    const target = new Date(start.getTime() + durMin*60000);
+    const remainingMs = target - now;
+    if(remainingMs > 0){
+      lblEl.textContent = 'ডিউটি শেষ হতে বাকি';
+      valEl.textContent = formatHMS(remainingMs/1000);
+      valEl.style.color = 'var(--navy)';
+    } else {
+      lblEl.textContent = 'ডিউটি সময় শেষ · ওভারটাইম চলছে';
+      valEl.textContent = formatHMS(-remainingMs/1000);
+      valEl.style.color = 'var(--rust)';
+    }
+  }
+  function startDutyTimer(entryTime24){
+    stopDutyTimer();
+    updateDutyTimer(entryTime24);
+    dutyTimerInterval = setInterval(()=>updateDutyTimer(entryTime24), 1000);
+  }
+
   function renderTodayCard(){
     const key = todayKey();
     const entry = data[key];
@@ -689,6 +737,7 @@
     const dateStr = now.getDate()+' '+MONTH_BN[now.getMonth()]+' '+now.getFullYear();
 
     if(entry && entry.type === 'work' && entry.exit){
+      stopDutyTimer();
       const dur = durationLabel(entry.entry, entry.exit);
       const flags = getFlags(entry);
       const flagNote = [flags.late?'দেরিতে ঢুকেছেন':'', flags.early?'আগে বের হয়েছেন':''].filter(Boolean).join(' · ');
@@ -709,15 +758,22 @@
         <div style="font-size:16px;font-weight:600;color:var(--navy);">এখনো ডিউটিতে আছেন</div>
         <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">এন্ট্রি: ${to12Hour(entry.entry)}</div>
         ${flags.late ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;">দেরিতে ঢুকেছেন</div>` : ''}
+        <div style="margin-top:12px;padding:12px 14px;background:var(--navy-soft);border-radius:12px;text-align:center;">
+          <div style="font-size:11px;color:var(--ink-soft);font-weight:600;margin-bottom:4px;" id="dutyTimerLbl">ডিউটি শেষ হতে বাকি</div>
+          <div style="font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--navy);letter-spacing:0.02em;" id="dutyTimerVal">--:--:--</div>
+        </div>
         <button class="btn primary" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এক্সিট টাইম দিন</button>
       `;
+      startDutyTimer(entry.entry);
     } else if(entry && entry.type === 'off'){
+      stopDutyTimer();
       el.innerHTML = `
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
         <div style="font-size:16px;font-weight:600;color:var(--gold);">আজ ছুটির দিন${entry.label? ' — '+entry.label : ''}</div>
         <button class="btn" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এডিট করুন</button>
       `;
     } else {
+      stopDutyTimer();
       el.innerHTML = `
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
         <div style="font-size:16px;font-weight:600;">আজকের এন্ট্রি এখনো দেওয়া হয়নি</div>
