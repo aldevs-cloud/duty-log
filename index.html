@@ -211,6 +211,10 @@
   }
   .timefield-clear:hover{border-color:var(--rust);color:var(--rust);}
 
+  /* ---------- late/early reason fields ---------- */
+  .reasonfield{border-left:3px solid #B45A2E;padding-left:10px;}
+  .reasonfield label{color:#B45A2E;}
+
   /* ---------- Analog clock picker ---------- */
   .tp-sheet{max-width:320px;text-align:center;}
   .tp-header{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;}
@@ -384,6 +388,15 @@
         </div>
       </div>
       <div class="hint" id="durationHint">শুধু এন্ট্রি টাইম দিলেও সংরক্ষণ হবে — এক্সিট টাইম পরে যোগ করতে পারবেন।</div>
+
+      <div class="field reasonfield" id="lateReasonField" style="display:none;">
+        <label>দেরির কারণ (ঐচ্ছিক)</label>
+        <input type="text" id="lateReasonInput" placeholder="যেমনঃ রাস্তায় জ্যাম ছিল">
+      </div>
+      <div class="field reasonfield" id="earlyReasonField" style="display:none;">
+        <label>আগে বের হওয়ার কারণ (ঐচ্ছিক)</label>
+        <input type="text" id="earlyReasonInput" placeholder="যেমনঃ ডাক্তার দেখাতে হয়েছিল">
+      </div>
     </div>
 
     <div id="offFields" style="display:none;">
@@ -625,7 +638,10 @@
         if(flags.late || flags.early){
           const fd = document.createElement('div');
           fd.className = 'flagdot';
-          fd.title = [flags.late?'দেরি':'', flags.early?'আগে বের':''].filter(Boolean).join(', ');
+          const parts = [];
+          if(flags.late) parts.push('দেরি' + (info.entry.lateReason ? ': '+info.entry.lateReason : ''));
+          if(flags.early) parts.push('আগে বের' + (info.entry.earlyReason ? ': '+info.entry.earlyReason : ''));
+          fd.title = parts.join(', ');
           cell.appendChild(fd);
         }
       } else if(info.status === 'in-progress' || info.status === 'incomplete'){
@@ -637,7 +653,7 @@
         if(flags.late){
           const fd = document.createElement('div');
           fd.className = 'flagdot';
-          fd.title = 'দেরি';
+          fd.title = 'দেরি' + (info.entry.lateReason ? ': '+info.entry.lateReason : '');
           cell.appendChild(fd);
         }
       }
@@ -734,7 +750,10 @@
       stopDutyTimer();
       const dur = durationLabel(entry.entry, entry.exit);
       const flags = getFlags(entry);
-      const flagNote = [flags.late?'দেরিতে ঢুকেছেন':'', flags.early?'আগে বের হয়েছেন':''].filter(Boolean).join(' · ');
+      const flagNote = [
+        flags.late ? ('দেরিতে ঢুকেছেন' + (entry.lateReason ? ' — '+entry.lateReason : '')) : '',
+        flags.early ? ('আগে বের হয়েছেন' + (entry.earlyReason ? ' — '+entry.earlyReason : '')) : ''
+      ].filter(Boolean).join(' · ');
       el.innerHTML = `
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
         <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
@@ -751,7 +770,7 @@
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
         <div style="font-size:16px;font-weight:600;color:var(--navy);">এখনো ডিউটিতে আছেন</div>
         <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">এন্ট্রি: ${to12Hour(entry.entry)}</div>
-        ${flags.late ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;">দেরিতে ঢুকেছেন</div>` : ''}
+        ${flags.late ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;">দেরিতে ঢুকেছেন${entry.lateReason ? ' — '+entry.lateReason : ''}</div>` : ''}
         <div style="margin-top:12px;padding:12px 14px;background:var(--navy-soft);border-radius:12px;text-align:center;">
           <div style="font-size:11px;color:var(--ink-soft);font-weight:600;margin-bottom:4px;" id="dutyTimerLbl">ডিউটি শেষ হতে বাকি</div>
           <div style="font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--navy);letter-spacing:0.02em;" id="dutyTimerVal">--:--:--</div>
@@ -788,6 +807,12 @@
   let entryTimeValue = null; // 24hr "HH:MM" or null
   let exitTimeValue = null;
 
+  function updateReasonFieldsVisibility(){
+    const flags = getFlags({type:'work', entry: entryTimeValue, exit: exitTimeValue});
+    document.getElementById('lateReasonField').style.display = flags.late ? 'block' : 'none';
+    document.getElementById('earlyReasonField').style.display = flags.early ? 'block' : 'none';
+  }
+
   function refreshTimeFieldUI(){
     const eBtn = document.getElementById('entryTimeBtn');
     const eLbl = document.getElementById('entryTimeLabel');
@@ -800,6 +825,7 @@
     else { xLbl.textContent = 'এখনো দিইনি'; xBtn.classList.add('empty'); }
 
     updateDurationHint();
+    updateReasonFieldsVisibility();
   }
 
   function openDaySheet(key){
@@ -814,6 +840,8 @@
 
     entryTimeValue = (entry && entry.type==='work') ? entry.entry : null;
     exitTimeValue = (entry && entry.type==='work' && entry.exit) ? entry.exit : null;
+    document.getElementById('lateReasonInput').value = (entry && entry.type==='work' && entry.lateReason) ? entry.lateReason : '';
+    document.getElementById('earlyReasonInput').value = (entry && entry.type==='work' && entry.earlyReason) ? entry.earlyReason : '';
     refreshTimeFieldUI();
     document.getElementById('offLabel').value = (entry && entry.type==='off') ? (entry.label||'') : '';
 
@@ -868,7 +896,17 @@
     if(!activeDate) return;
     if(activeMode === 'work'){
       if(!entryTimeValue){ toast('এন্ট্রি টাইম নির্বাচন করুন'); return; }
-      data[activeDate] = {type:'work', entry:entryTimeValue, exit: exitTimeValue || null};
+      const flags = getFlags({type:'work', entry: entryTimeValue, exit: exitTimeValue});
+      const entryObj = {type:'work', entry:entryTimeValue, exit: exitTimeValue || null};
+      if(flags.late){
+        const lr = document.getElementById('lateReasonInput').value.trim();
+        if(lr) entryObj.lateReason = lr;
+      }
+      if(flags.early){
+        const er = document.getElementById('earlyReasonInput').value.trim();
+        if(er) entryObj.earlyReason = er;
+      }
+      data[activeDate] = entryObj;
     } else {
       const lbl = document.getElementById('offLabel').value.trim();
       data[activeDate] = {type:'off', label: lbl};
@@ -1097,7 +1135,7 @@
   const MONTH_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const WD_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-  function offLabelToAscii(label){
+  function asciiSafe(label){
     if(!label) return '';
     // Strip any non-ASCII characters (e.g. Bengali reason text) to avoid
     // garbled output; keep numbers/Latin letters/punctuation if present.
@@ -1131,17 +1169,30 @@
         const dur = durationLabel(info.entry.entry, info.entry.exit);
         if(dur){ durT = dur.hours+'h '+dur.minutes+'m'; totalMin += dur.totalMinutes; }
         const fl = [];
-        if(flags.late){ fl.push('Late'); late++; }
-        if(flags.early){ fl.push('Early Left'); early++; }
+        if(flags.late){
+          late++;
+          let t = 'Late';
+          if(info.entry.lateReason) t += ' ('+asciiSafe(info.entry.lateReason)+')';
+          fl.push(t);
+        }
+        if(flags.early){
+          early++;
+          let t = 'Early Left';
+          if(info.entry.earlyReason) t += ' ('+asciiSafe(info.entry.earlyReason)+')';
+          fl.push(t);
+        }
         flagT = fl.length ? fl.join(', ') : '-';
       } else if(info.status==='in-progress' || info.status==='incomplete'){
         statusLabel = info.status==='in-progress' ? 'Present (ongoing)' : 'Present (no exit logged)';
         present++;
         entryT = to12Hour(info.entry.entry);
-        if(flags.late){ flagT='Late'; late++; }
+        if(flags.late){
+          late++;
+          flagT = 'Late' + (info.entry.lateReason ? ' ('+asciiSafe(info.entry.lateReason)+')' : '');
+        }
       } else if(info.status==='missed'){ statusLabel='Missed'; missed++; }
       else if(info.status==='off'){
-        const reason = info.entry ? offLabelToAscii(info.entry.label) : '';
+        const reason = info.entry ? asciiSafe(info.entry.label) : '';
         statusLabel='Off/Holiday' + (reason ? ' - '+reason : '');
         off++;
       }
@@ -1156,7 +1207,8 @@
       body: rows,
       startY: 28,
       styles:{fontSize:8, font:'helvetica'},
-      headStyles:{fillColor:[47,122,107]}
+      headStyles:{fillColor:[47,122,107]},
+      columnStyles:{5:{cellWidth:55}}
     });
 
     const finalY = doc.lastAutoTable.finalY + 10;
