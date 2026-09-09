@@ -632,7 +632,7 @@
         const dur = durationLabel(info.entry.entry, info.entry.exit);
         const sub = document.createElement('div');
         sub.className = 'dsub';
-        sub.textContent = dur ? dur.hours+'.'+String(Math.round(dur.minutes/60*10)).padStart(1,'0')+'ঘ' : '';
+        sub.textContent = dur ? dur.hours+'ঘ'+String(dur.minutes).padStart(2,'0')+'মি' : '';
         cell.appendChild(sub);
         const flags = getFlags(info.entry);
         if(flags.late || flags.early){
@@ -692,7 +692,7 @@
     document.getElementById('statPresent').textContent = present;
     document.getElementById('statMissed').textContent = missed;
     document.getElementById('statOff').textContent = off;
-    document.getElementById('statHours').textContent = (totalMin/60).toFixed(1);
+    document.getElementById('statHours').textContent = Math.floor(totalMin/60)+'ঘ '+String(totalMin%60).padStart(2,'0')+'মি';
     document.getElementById('statLate').textContent = late;
     document.getElementById('statEarly').textContent = early;
   }
@@ -1214,7 +1214,7 @@
     const finalY = doc.lastAutoTable.finalY + 10;
     doc.setFontSize(10);
     doc.text('Present: '+present+'   Missed: '+missed+'   Off: '+off+'   Weekends: '+weekend, 14, finalY);
-    doc.text('Total hours: '+(totalMin/60).toFixed(1)+'   Late: '+late+'   Early Leave: '+early, 14, finalY+7);
+    doc.text('Total hours: '+Math.floor(totalMin/60)+'h '+String(totalMin%60).padStart(2,'0')+'m   Late: '+late+'   Early Leave: '+early, 14, finalY+7);
 
     doc.save('duty-log-'+viewYear+'-'+String(viewMonth+1).padStart(2,'0')+'.pdf');
     toast('PDF ডাউনলোড হচ্ছে');
