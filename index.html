@@ -22,6 +22,8 @@
     --gold-soft:#F7EDD9;
     --navy:#2C4A6E;
     --navy-soft:#E4EBF3;
+    --slate:#5B6B77;
+    --slate-soft:#E7ECEE;
     --shadow: 0 1px 2px rgba(21,36,32,0.04), 0 6px 20px rgba(21,36,32,0.06);
     --radius: 14px;
     --font-display:'Space Grotesk', 'Noto Sans Bengali', sans-serif;
@@ -98,8 +100,10 @@
   .stat .lbl{font-size:11px;color:var(--ink-soft);margin-top:6px;font-weight:500;}
   .stat.present .num{color:var(--teal);}
   .stat.missed .num{color:var(--rust);}
-  .stat.off .num{color:var(--gold);}
+  .stat.leave .num{color:var(--gold);}
+  .stat.holiday .num{color:var(--slate);}
   .stat.hours .num{color:var(--navy);}
+  .stat.expected .num{color:#3B6E8F;}
   .stat.late .num{color:#B45A2E;}
   .stat.early .num{color:#8A5CB8;}
 
@@ -135,6 +139,8 @@
   .day.missed .dnum{color:var(--rust);}
   .day.off{background:var(--gold-soft);border-color:var(--gold);}
   .day.off .dnum{color:var(--gold);}
+  .day.off.type-holiday{background:var(--slate-soft);border-color:var(--slate);}
+  .day.off.type-holiday .dnum{color:var(--slate);}
   .day.weekend:not(.worked):not(.off):not(.missed){background:#F5F5F3;}
   .day.in-progress{background:var(--navy-soft);border-color:var(--navy);}
   .day.in-progress .dnum{color:var(--navy);}
@@ -285,8 +291,10 @@
   <div class="stats">
     <div class="stat present"><div class="num" id="statPresent">0</div><div class="lbl">উপস্থিত</div></div>
     <div class="stat missed"><div class="num" id="statMissed">0</div><div class="lbl">অনুপস্থিত</div></div>
-    <div class="stat off"><div class="num" id="statOff">0</div><div class="lbl">ছুটি</div></div>
-    <div class="stat hours"><div class="num" id="statHours">0</div><div class="lbl">মোট ঘণ্টা</div></div>
+    <div class="stat leave"><div class="num" id="statLeave">0</div><div class="lbl">ব্যক্তিগত ছুটি</div></div>
+    <div class="stat holiday"><div class="num" id="statHoliday">0</div><div class="lbl">সরকারি বন্ধ</div></div>
+    <div class="stat hours"><div class="num" id="statHours">0</div><div class="lbl">প্রকৃত ঘণ্টা</div></div>
+    <div class="stat expected"><div class="num" id="statExpected">0</div><div class="lbl">প্রত্যাশিত ঘণ্টা</div></div>
     <div class="stat late"><div class="num" id="statLate">0</div><div class="lbl">দেরি</div></div>
     <div class="stat early"><div class="num" id="statEarly">0</div><div class="lbl">আগে বের</div></div>
   </div>
@@ -315,7 +323,8 @@
       <span><i style="background:var(--teal)"></i> ডিউটি করা হয়েছে</span>
       <span><i style="background:var(--navy)"></i> চলছে / এক্সিট বাকি</span>
       <span><i style="background:var(--rust)"></i> অনুপস্থিত</span>
-      <span><i style="background:var(--gold)"></i> ছুটি / বন্ধ</span>
+      <span><i style="background:var(--gold)"></i> ব্যক্তিগত ছুটি</span>
+      <span><i style="background:var(--slate)"></i> সরকারি/অফিস বন্ধ</span>
       <span><i style="background:#D9D9D6"></i> সাপ্তাহিক ছুটি</span>
       <span><i style="background:#B45A2E"></i> দেরি / আগে বের</span>
     </div>
@@ -361,7 +370,7 @@
     <div class="subdate" id="sheetDate"></div>
 
     <div class="tabs">
-      <div class="tab active" data-mode="work">ডিউটি টাইম</div>
+      <div class="tab" data-mode="work">ডিউটি টাইম</div>
       <div class="tab" data-mode="off">ছুটি / বন্ধ</div>
     </div>
 
@@ -401,8 +410,16 @@
 
     <div id="offFields" style="display:none;">
       <div class="field">
-        <label>কারণ (ঐচ্ছিক)</label>
-        <input type="text" id="offLabel" placeholder="যেমনঃ ঈদের ছুটি, অসুস্থতা, ব্যক্তিগত ছুটি">
+        <label>ছুটির ধরন</label>
+        <div class="tabs" style="margin-bottom:0;">
+          <div class="tab offtypetab" data-offtype="leave">ব্যক্তিগত ছুটি</div>
+          <div class="tab offtypetab" data-offtype="holiday">সরকারি/অফিস বন্ধ</div>
+        </div>
+        <div class="hint" style="margin-top:8px;margin-bottom:0;">ব্যক্তিগত ছুটি নিলে সেটা আপনার প্রত্যাশিত ডিউটি আওয়ারের হিসাবে থেকে যাবে (কাজ করেননি এমন হিসেবে গণনা হবে)। সরকারি/অফিস বন্ধ হলে সেই দিনের জন্য কোনো ডিউটি আওয়ারই হিসাব করা হবে না।</div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>কারণ / নাম (ঐচ্ছিক)</label>
+        <input type="text" id="offLabel" placeholder="যেমনঃ ঈদের ছুটি, অসুস্থতা, ব্যক্তিগত কাজ">
       </div>
     </div>
 
@@ -424,7 +441,7 @@
     <div class="weekgrid" id="weekgrid"></div>
     <div class="hint" style="margin-bottom:20px;">নির্বাচিত দিনগুলোতে এন্ট্রি না দিলে "অনুপস্থিত" হিসেবে দেখাবে না।</div>
 
-    <div class="subdate" style="margin-bottom:12px;">ডিউটি আওয়ার (দেরি/আগে বের হওয়া হিসাব করতে)</div>
+    <div class="subdate" style="margin-bottom:12px;">ডিউটি আওয়ার (দেরি/আগে বের হওয়া ও প্রত্যাশিত ঘণ্টা হিসাব করতে)</div>
     <div class="row2">
       <div class="field">
         <label>শুরু</label>
@@ -441,7 +458,7 @@
         </button>
       </div>
     </div>
-    <div class="hint">এন্ট্রি টাইম শুরুর সময়ের পরে হলে "দেরি", আর এক্সিট টাইম শেষের সময়ের আগে হলে "আগে বের হওয়া" হিসেবে গণনা হবে।</div>
+    <div class="hint">এন্ট্রি টাইম শুরুর সময়ের পরে হলে "দেরি", আর এক্সিট টাইম শেষের সময়ের আগে হলে "আগে বের হওয়া" হিসেবে গণনা হবে। প্রতিটা কর্মদিবসের জন্য এই শুরু-শেষের মধ্যকার সময়টাই "প্রত্যাশিত ঘণ্টা" হিসেবে ধরা হবে।</div>
 
     <div class="sheet-actions">
       <button class="btn primary" id="saveSettingsBtn" style="width:100%;">সংরক্ষণ করুন</button>
@@ -489,6 +506,7 @@
   let viewYear, viewMonth; // 0-indexed month
   let activeDate = null;
   let activeMode = 'work';
+  let activeOffType = 'leave';
 
   const todayD = new Date();
   viewYear = todayD.getFullYear();
@@ -551,6 +569,15 @@
     return settings.weekend.includes(dateObj.getDay());
   }
 
+  // "leave" = employee's own leave (still an expected duty day, just absent).
+  // "holiday" = office itself closed (no duty hour expected at all that day).
+  // Legacy off-entries saved before this feature was added have no offType —
+  // those are treated as 'holiday' so old stats/behavior don't suddenly shift.
+  function effectiveOffType(entry){
+    if(entry && entry.type === 'off' && entry.offType) return entry.offType;
+    return 'holiday';
+  }
+
   function getDayStatus(y,m,d){
     const key = fmtDateKey(y,m,d);
     const dObj = new Date(y,m,d);
@@ -593,6 +620,72 @@
       if(exitMin!=null && endMin!=null && exitMin < endMin) flags.early = true;
     }
     return flags;
+  }
+
+  // Duty-hours-per-day derived from settings (handles an overnight shift where
+  // end time is numerically before start time).
+  function dailyDutyMinutes(){
+    const s = timeToMinutes(settings.dutyStart);
+    const e = timeToMinutes(settings.dutyEnd);
+    if(s==null || e==null) return 0;
+    let diff = e - s;
+    if(diff < 0) diff += 24*60;
+    return diff;
+  }
+
+  // Aggregates a full month: present/missed/leave/holiday/weekend counts,
+  // actual worked minutes, late/early counts, and the "expected" duty days &
+  // minutes (weekdays that are not a holiday — leave days still count as
+  // expected since the employee was supposed to be on duty).
+  function computeMonthSummary(y,m){
+    const daysInMonth = new Date(y, m+1, 0).getDate();
+    const dailyMin = dailyDutyMinutes();
+
+    let present=0, missed=0, leave=0, holiday=0, weekend=0;
+    let totalWorkedMin=0, late=0, early=0;
+    let expectedDays=0, expectedMin=0;
+
+    for(let d=1; d<=daysInMonth; d++){
+      const info = getDayStatus(y,m,d);
+      const dObj = new Date(y,m,d);
+      const wknd = isWeekend(dObj);
+
+      if(info.status === 'future') continue;
+
+      if(info.status === 'off'){
+        const ot = effectiveOffType(info.entry);
+        if(ot === 'holiday'){
+          holiday++;
+        } else {
+          leave++;
+          if(!wknd){ expectedDays++; expectedMin += dailyMin; }
+        }
+        continue;
+      }
+
+      if(info.status === 'weekend'){ weekend++; continue; }
+
+      // ordinary duty day: worked / in-progress / incomplete / missed / today-pending
+      expectedDays++; expectedMin += dailyMin;
+
+      if(info.status === 'worked'){
+        present++;
+        const dur = durationLabel(info.entry.entry, info.entry.exit);
+        if(dur) totalWorkedMin += dur.totalMinutes;
+        const flags = getFlags(info.entry);
+        if(flags.late) late++;
+        if(flags.early) early++;
+      } else if(info.status === 'in-progress' || info.status === 'incomplete'){
+        present++;
+        const flags = getFlags(info.entry);
+        if(flags.late) late++;
+      } else if(info.status === 'missed'){
+        missed++;
+      }
+      // 'today-pending' — not yet decided either way, no count.
+    }
+
+    return {present, missed, leave, holiday, weekend, totalWorkedMin, late, early, expectedDays, expectedMin, dailyMin};
   }
 
   // ---------- Rendering ----------
@@ -656,6 +749,14 @@
           fd.title = 'দেরি' + (info.entry.lateReason ? ': '+info.entry.lateReason : '');
           cell.appendChild(fd);
         }
+      } else if(info.status === 'off'){
+        const ot = effectiveOffType(info.entry);
+        cell.classList.add('type-'+ot);
+        const sub = document.createElement('div');
+        sub.className = 'dsub';
+        sub.textContent = ot === 'holiday' ? 'বন্ধ' : 'ছুটি';
+        if(info.entry && info.entry.label){ cell.title = info.entry.label; }
+        cell.appendChild(sub);
       }
       if(info.status === 'today-pending'){
         const dot = document.createElement('div');
@@ -668,33 +769,15 @@
   }
 
   function renderStats(){
-    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
-    let present=0, missed=0, off=0, totalMin=0, late=0, early=0;
-    for(let d=1; d<=daysInMonth; d++){
-      const info = getDayStatus(viewYear, viewMonth, d);
-      if(info.status==='worked'){
-        present++;
-        const dur = durationLabel(info.entry.entry, info.entry.exit);
-        if(dur) totalMin += dur.totalMinutes;
-        const flags = getFlags(info.entry);
-        if(flags.late) late++;
-        if(flags.early) early++;
-      } else if(info.status==='in-progress' || info.status==='incomplete'){
-        present++;
-        const flags = getFlags(info.entry);
-        if(flags.late) late++;
-      } else if(info.status==='missed'){
-        missed++;
-      } else if(info.status==='off'){
-        off++;
-      }
-    }
-    document.getElementById('statPresent').textContent = present;
-    document.getElementById('statMissed').textContent = missed;
-    document.getElementById('statOff').textContent = off;
-    document.getElementById('statHours').textContent = Math.floor(totalMin/60)+'ঘ '+String(totalMin%60).padStart(2,'0')+'মি';
-    document.getElementById('statLate').textContent = late;
-    document.getElementById('statEarly').textContent = early;
+    const s = computeMonthSummary(viewYear, viewMonth);
+    document.getElementById('statPresent').textContent = s.present;
+    document.getElementById('statMissed').textContent = s.missed;
+    document.getElementById('statLeave').textContent = s.leave;
+    document.getElementById('statHoliday').textContent = s.holiday;
+    document.getElementById('statHours').textContent = Math.floor(s.totalWorkedMin/60)+'ঘ '+String(s.totalWorkedMin%60).padStart(2,'0')+'মি';
+    document.getElementById('statExpected').textContent = Math.floor(s.expectedMin/60)+'ঘ '+String(s.expectedMin%60).padStart(2,'0')+'মি';
+    document.getElementById('statLate').textContent = s.late;
+    document.getElementById('statEarly').textContent = s.early;
   }
 
   // ---------- Duty countdown timer ----------
@@ -780,9 +863,12 @@
       startDutyTimer(entry.entry);
     } else if(entry && entry.type === 'off'){
       stopDutyTimer();
+      const ot = effectiveOffType(entry);
+      const label = ot === 'holiday' ? 'আজ সরকারি/অফিস বন্ধ' : 'আজ ব্যক্তিগত ছুটি';
+      const color = ot === 'holiday' ? 'var(--slate)' : 'var(--gold)';
       el.innerHTML = `
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
-        <div style="font-size:16px;font-weight:600;color:var(--gold);">আজ ছুটির দিন${entry.label? ' — '+entry.label : ''}</div>
+        <div style="font-size:16px;font-weight:600;color:${color};">${label}${entry.label? ' — '+entry.label : ''}</div>
         <button class="btn" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এডিট করুন</button>
       `;
     } else {
@@ -828,6 +914,11 @@
     updateReasonFieldsVisibility();
   }
 
+  function setOffTypeTab(type){
+    activeOffType = type;
+    document.querySelectorAll('.offtypetab').forEach(t=>t.classList.toggle('active', t.dataset.offtype===type));
+  }
+
   function openDaySheet(key){
     activeDate = key;
     const [y,m,d] = key.split('-').map(Number);
@@ -844,6 +935,7 @@
     document.getElementById('earlyReasonInput').value = (entry && entry.type==='work' && entry.earlyReason) ? entry.earlyReason : '';
     refreshTimeFieldUI();
     document.getElementById('offLabel').value = (entry && entry.type==='off') ? (entry.label||'') : '';
+    setOffTypeTab((entry && entry.type==='off') ? effectiveOffType(entry) : 'leave');
 
     document.getElementById('dayOverlay').classList.add('show');
   }
@@ -853,7 +945,7 @@
   }
   function setTab(mode){
     activeMode = mode;
-    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.mode===mode));
+    document.querySelectorAll('.tab[data-mode]').forEach(t=>t.classList.toggle('active', t.dataset.mode===mode));
     document.getElementById('workFields').style.display = mode==='work' ? 'block':'none';
     document.getElementById('offFields').style.display = mode==='off' ? 'block':'none';
   }
@@ -869,8 +961,11 @@
     }
   }
 
-  document.querySelectorAll('.tab').forEach(t=>{
+  document.querySelectorAll('.tab[data-mode]').forEach(t=>{
     t.addEventListener('click', ()=>setTab(t.dataset.mode));
+  });
+  document.querySelectorAll('.offtypetab').forEach(t=>{
+    t.addEventListener('click', ()=>setOffTypeTab(t.dataset.offtype));
   });
   document.getElementById('entryTimeBtn').addEventListener('click', ()=>{
     openTimePicker(entryTimeValue || settings.dutyStart, (val)=>{
@@ -909,7 +1004,7 @@
       data[activeDate] = entryObj;
     } else {
       const lbl = document.getElementById('offLabel').value.trim();
-      data[activeDate] = {type:'off', label: lbl};
+      data[activeDate] = {type:'off', label: lbl, offType: activeOffType};
     }
     saveData();
     renderAll();
@@ -1155,7 +1250,6 @@
     doc.text('Exported: ' + new Date().toLocaleString('en-US'), 14, 22);
 
     const rows = [];
-    let totalMin = 0, present=0, missed=0, off=0, weekend=0, late=0, early=0;
     for(let d=1; d<=daysInMonth; d++){
       const info = getDayStatus(viewYear, viewMonth, d);
       const dObj = new Date(viewYear, viewMonth, d);
@@ -1164,19 +1258,17 @@
       const flags = getFlags(info.entry);
 
       if(info.status==='worked'){
-        statusLabel='Present'; present++;
+        statusLabel='Present';
         entryT = to12Hour(info.entry.entry); exitT = to12Hour(info.entry.exit);
         const dur = durationLabel(info.entry.entry, info.entry.exit);
-        if(dur){ durT = dur.hours+'h '+dur.minutes+'m'; totalMin += dur.totalMinutes; }
+        if(dur){ durT = dur.hours+'h '+dur.minutes+'m'; }
         const fl = [];
         if(flags.late){
-          late++;
           let t = 'Late';
           if(info.entry.lateReason) t += ' ('+asciiSafe(info.entry.lateReason)+')';
           fl.push(t);
         }
         if(flags.early){
-          early++;
           let t = 'Early Left';
           if(info.entry.earlyReason) t += ' ('+asciiSafe(info.entry.earlyReason)+')';
           fl.push(t);
@@ -1184,19 +1276,17 @@
         flagT = fl.length ? fl.join(', ') : '-';
       } else if(info.status==='in-progress' || info.status==='incomplete'){
         statusLabel = info.status==='in-progress' ? 'Present (ongoing)' : 'Present (no exit logged)';
-        present++;
         entryT = to12Hour(info.entry.entry);
         if(flags.late){
-          late++;
           flagT = 'Late' + (info.entry.lateReason ? ' ('+asciiSafe(info.entry.lateReason)+')' : '');
         }
-      } else if(info.status==='missed'){ statusLabel='Missed'; missed++; }
+      } else if(info.status==='missed'){ statusLabel='Missed'; }
       else if(info.status==='off'){
+        const ot = effectiveOffType(info.entry);
         const reason = info.entry ? asciiSafe(info.entry.label) : '';
-        statusLabel='Off/Holiday' + (reason ? ' - '+reason : '');
-        off++;
+        statusLabel = (ot==='holiday' ? 'Holiday / Office Closed' : 'Leave') + (reason ? ' - '+reason : '');
       }
-      else if(info.status==='weekend'){ statusLabel='Weekend'; weekend++; }
+      else if(info.status==='weekend'){ statusLabel='Weekend'; }
       else if(info.status==='future'){ statusLabel='-'; }
       else if(info.status==='today-pending'){ statusLabel='Pending'; }
       rows.push([d+' ('+wd+')', statusLabel, entryT, exitT, durT, flagT]);
@@ -1211,10 +1301,35 @@
       columnStyles:{5:{cellWidth:55}}
     });
 
-    const finalY = doc.lastAutoTable.finalY + 10;
+    const s = computeMonthSummary(viewYear, viewMonth);
+    const expH = Math.floor(s.expectedMin/60), expM = s.expectedMin%60;
+    const actH = Math.floor(s.totalWorkedMin/60), actM = s.totalWorkedMin%60;
+    const diffMin = s.totalWorkedMin - s.expectedMin;
+    const diffSign = diffMin < 0 ? '-' : '+';
+    const diffH = Math.floor(Math.abs(diffMin)/60), diffM = Math.abs(diffMin)%60;
+
+    let finalY = doc.lastAutoTable.finalY + 10;
+    doc.setFont('helvetica','bold');
     doc.setFontSize(10);
-    doc.text('Present: '+present+'   Missed: '+missed+'   Off: '+off+'   Weekends: '+weekend, 14, finalY);
-    doc.text('Total hours: '+Math.floor(totalMin/60)+'h '+String(totalMin%60).padStart(2,'0')+'m   Late: '+late+'   Early Leave: '+early, 14, finalY+7);
+    doc.text('Summary', 14, finalY);
+    doc.setFont('helvetica','normal');
+    finalY += 7;
+    doc.text('Present: '+s.present+'   Missed: '+s.missed+'   Leave: '+s.leave+'   Holiday: '+s.holiday+'   Weekend: '+s.weekend, 14, finalY);
+    finalY += 7;
+    doc.text('Late: '+s.late+'   Early Leave: '+s.early, 14, finalY);
+    finalY += 10;
+    doc.setFont('helvetica','bold');
+    doc.text('Expected duty days (weekdays, excluding holidays): ' + s.expectedDays, 14, finalY);
+    finalY += 7;
+    doc.text('Expected duty hours: ' + expH + 'h ' + String(expM).padStart(2,'0') + 'm', 14, finalY);
+    finalY += 7;
+    doc.text('Actual duty hours worked: ' + actH + 'h ' + String(actM).padStart(2,'0') + 'm', 14, finalY);
+    finalY += 7;
+    doc.text('Difference (actual - expected): ' + diffSign + diffH + 'h ' + String(diffM).padStart(2,'0') + 'm', 14, finalY);
+    doc.setFont('helvetica','normal');
+    finalY += 9;
+    doc.setFontSize(8);
+    doc.text('Note: Holidays are excluded from expected duty hours entirely. Leave days still count toward expected duty hours (as a day the employee was supposed to work).', 14, finalY);
 
     doc.save('duty-log-'+viewYear+'-'+String(viewMonth+1).padStart(2,'0')+'.pdf');
     toast('PDF ডাউনলোড হচ্ছে');
