@@ -9,21 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#EEF3F1;
-    --paper-raised:#FFFFFF;
-    --ink:#152420;
-    --ink-soft:#4B5B56;
-    --line:#D8E1DD;
-    --teal:#2F7A6B;
-    --teal-soft:#E1F0EB;
-    --rust:#C1502E;
-    --rust-soft:#FBE7E0;
-    --gold:#B98A2E;
-    --gold-soft:#F7EDD9;
-    --navy:#2C4A6E;
-    --navy-soft:#E4EBF3;
-    --slate:#5B6B77;
-    --slate-soft:#E7ECEE;
+    --paper:#EEF3F1;--paper-raised:#FFFFFF;--ink:#152420;--ink-soft:#4B5B56;--line:#D8E1DD;
+    --teal:#2F7A6B;--teal-soft:#E1F0EB;--rust:#C1502E;--rust-soft:#FBE7E0;--gold:#B98A2E;--gold-soft:#F7EDD9;
+    --navy:#2C4A6E;--navy-soft:#E4EBF3;--slate:#5B6B77;--slate-soft:#E7ECEE;
     --shadow: 0 1px 2px rgba(21,36,32,0.04), 0 6px 20px rgba(21,36,32,0.06);
     --radius: 14px;
     --font-display:'Space Grotesk', 'Noto Sans Bengali', sans-serif;
@@ -32,70 +20,29 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:var(--font-body);
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-    padding-bottom:40px;
-  }
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased;min-height:100vh;padding-bottom:40px;}
   ::selection{background:var(--teal-soft);}
   a{color:inherit;}
-
   .wrap{max-width:760px;margin:0 auto;padding:20px 16px 0;}
 
-  /* ---------- Header ---------- */
-  header.app{
-    display:flex;align-items:center;justify-content:space-between;
-    margin-bottom:18px;
-  }
+  header.app{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
   .brand{display:flex;align-items:center;gap:10px;}
-  .brand .mark{
-    width:38px;height:38px;border-radius:10px;background:var(--teal);
-    position:relative;flex-shrink:0;
-    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.12);
-  }
-  .brand .mark::before,.brand .mark::after{
-    content:'';position:absolute;background:var(--paper);border-radius:2px;
-  }
+  .brand .mark{width:38px;height:38px;border-radius:10px;background:var(--teal);position:relative;flex-shrink:0;box-shadow: inset 0 -3px 0 rgba(0,0,0,0.12);}
+  .brand .mark::before,.brand .mark::after{content:'';position:absolute;background:var(--paper);border-radius:2px;}
   .brand .mark::before{width:3px;height:14px;left:17.5px;top:8px;}
   .brand .mark::after{width:10px;height:3px;left:19px;top:19px;transform:rotate(35deg);transform-origin:left center;}
-  .brand h1{
-    font-family:var(--font-display);font-size:19px;font-weight:700;margin:0;line-height:1.1;
-    letter-spacing:-0.01em;
-  }
+  .brand h1{font-family:var(--font-display);font-size:19px;font-weight:700;margin:0;line-height:1.1;letter-spacing:-0.01em;}
   .brand small{display:block;color:var(--ink-soft);font-size:12px;font-weight:500;margin-top:1px;}
-  .icon-btn{
-    width:38px;height:38px;border-radius:10px;border:1px solid var(--line);
-    background:var(--paper-raised);display:flex;align-items:center;justify-content:center;
-    cursor:pointer;color:var(--ink-soft);
-  }
+  .icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--paper-raised);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);}
   .icon-btn:hover{border-color:var(--teal);color:var(--teal);}
   .icon-btn svg{width:18px;height:18px;}
 
-  /* ---------- Punch-card frame ---------- */
-  .card{
-    background:var(--paper-raised);border-radius:var(--radius);
-    box-shadow:var(--shadow);position:relative;
-    padding:18px 18px 18px 26px;margin-bottom:16px;
-    border:1px solid var(--line);
-  }
-  .card::before{
-    content:'';position:absolute;left:9px;top:16px;bottom:16px;width:1px;
-    background:repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 13px);
-  }
-  .card .punchdot{
-    position:absolute;left:5px;width:9px;height:9px;border-radius:50%;
-    background:var(--paper);border:1.5px solid var(--line);
-  }
+  .card{background:var(--paper-raised);border-radius:var(--radius);box-shadow:var(--shadow);position:relative;padding:18px 18px 18px 26px;margin-bottom:16px;border:1px solid var(--line);}
+  .card::before{content:'';position:absolute;left:9px;top:16px;bottom:16px;width:1px;background:repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 13px);}
+  .card .punchdot{position:absolute;left:5px;width:9px;height:9px;border-radius:50%;background:var(--paper);border:1.5px solid var(--line);}
 
-  /* ---------- Stat strip ---------- */
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-  .stat{
-    background:var(--paper-raised);border:1px solid var(--line);border-radius:12px;
-    padding:12px 10px;text-align:center;box-shadow:var(--shadow);
-  }
+  .stat{background:var(--paper-raised);border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center;box-shadow:var(--shadow);}
   .stat .num{font-family:var(--font-mono);font-size:20px;font-weight:600;line-height:1;}
   .stat .lbl{font-size:11px;color:var(--ink-soft);margin-top:6px;font-weight:500;}
   .stat.present .num{color:var(--teal);}
@@ -107,28 +54,17 @@
   .stat.late .num{color:#B45A2E;}
   .stat.early .num{color:#8A5CB8;}
 
-  /* ---------- Month nav ---------- */
   .monthbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
   .monthbar h2{font-family:var(--font-display);font-size:16px;font-weight:600;margin:0;}
   .monthbar .navbtns{display:flex;gap:6px;}
-  .navbtn{
-    width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--paper-raised);
-    display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);
-  }
+  .navbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--paper-raised);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);}
   .navbtn:hover{border-color:var(--teal);color:var(--teal);}
 
-  /* ---------- Calendar ---------- */
   .weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;}
-  .weekdays span{
-    text-align:center;font-size:11px;color:var(--ink-soft);font-weight:600;
-  }
+  .weekdays span{text-align:center;font-size:11px;color:var(--ink-soft);font-weight:600;}
   .weekdays span.weekend{color:var(--gold);}
   .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
-  .day{
-    aspect-ratio:1/1;border-radius:9px;border:1px solid var(--line);background:var(--paper-raised);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-    cursor:pointer;position:relative;padding:2px;min-height:44px;
-  }
+  .day{aspect-ratio:1/1;border-radius:9px;border:1px solid var(--line);background:var(--paper-raised);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;position:relative;padding:2px;min-height:44px;}
   .day:hover{border-color:var(--teal);}
   .day.empty{visibility:hidden;pointer-events:none;}
   .day .dnum{font-family:var(--font-mono);font-size:13px;font-weight:500;}
@@ -155,36 +91,29 @@
   .legend span{display:flex;align-items:center;gap:5px;}
   .legend i{width:9px;height:9px;border-radius:3px;display:inline-block;}
 
-  /* ---------- Buttons row ---------- */
   .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
-  .btn{
-    flex:1;min-width:120px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
-    background:var(--paper-raised);font-family:var(--font-body);font-size:13px;font-weight:600;
-    cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:6px;
-  }
+  .btn{flex:1;min-width:120px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper-raised);font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:6px;}
   .btn:hover{border-color:var(--teal);color:var(--teal);}
   .btn.primary{background:var(--teal);border-color:var(--teal);color:#fff;}
   .btn.primary:hover{opacity:0.92;color:#fff;}
+  .btn.primary:disabled{opacity:0.6;cursor:wait;}
   .btn.danger:hover{border-color:var(--rust);color:var(--rust);}
   .btn svg{width:15px;height:15px;}
 
-  /* ---------- Modal ---------- */
-  .overlay{
-    position:fixed;inset:0;background:rgba(21,36,32,0.45);display:none;
-    align-items:flex-end;justify-content:center;z-index:50;padding:0;
-  }
+  /* JSON dropdown (hidden by default) */
+  details.dd{margin-top:12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);}
+  details.dd summary{list-style:none;cursor:pointer;padding:10px 12px;font-size:12px;font-weight:600;color:var(--ink-soft);display:flex;align-items:center;justify-content:space-between;}
+  details.dd summary::-webkit-details-marker{display:none;}
+  details.dd summary::after{content:'▾';transition:transform .2s;}
+  details.dd[open] summary::after{transform:rotate(180deg);}
+  details.dd .ddbody{padding:0 12px 12px;}
+  details.dd .ddhint{font-size:11px;color:var(--ink-soft);margin:0 0 10px;line-height:1.5;}
+
+  .overlay{position:fixed;inset:0;background:rgba(21,36,32,0.45);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:0;}
   .overlay.show{display:flex;}
-  @media(min-width:600px){
-    .overlay{align-items:center;}
-  }
-  .sheet{
-    background:var(--paper-raised);width:100%;max-width:460px;border-radius:18px 18px 0 0;
-    padding:20px 20px 24px;box-shadow:0 -10px 40px rgba(0,0,0,0.2);
-    max-height:90vh;overflow-y:auto;
-  }
-  @media(min-width:600px){
-    .sheet{border-radius:18px;margin-bottom:20px;}
-  }
+  @media(min-width:600px){.overlay{align-items:center;}}
+  .sheet{background:var(--paper-raised);width:100%;max-width:460px;border-radius:18px 18px 0 0;padding:20px 20px 24px;box-shadow:0 -10px 40px rgba(0,0,0,0.2);max-height:90vh;overflow-y:auto;position:relative;}
+  @media(min-width:600px){.sheet{border-radius:18px;margin-bottom:20px;}}
   .sheet h3{font-family:var(--font-display);margin:0 0 2px;font-size:17px;}
   .sheet .subdate{color:var(--ink-soft);font-size:12px;margin-bottom:16px;font-family:var(--font-mono);}
   .tabs{display:flex;gap:6px;margin-bottom:16px;background:var(--paper);padding:4px;border-radius:10px;}
@@ -192,46 +121,29 @@
   .tab.active{background:var(--paper-raised);color:var(--ink);box-shadow:var(--shadow);}
   .field{margin-bottom:14px;}
   .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
-  .field input[type=text], .field select{
-    width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
-    font-family:var(--font-mono);font-size:14px;background:var(--paper);color:var(--ink);
-  }
+  .field input[type=text], .field input[type=password], .field select{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);font-family:var(--font-mono);font-size:14px;background:var(--paper);color:var(--ink);}
+  .field input:focus{outline:none;border-color:var(--teal);}
   .field select{font-family:var(--font-body);}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 
-  /* ---------- Time field button (opens analog picker) ---------- */
-  .timefield{
-    width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
-    font-family:var(--font-mono);font-size:14px;background:var(--paper);color:var(--ink);
-    display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;
-    text-align:left;
-  }
+  .timefield{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);font-family:var(--font-mono);font-size:14px;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;text-align:left;}
   .timefield:hover{border-color:var(--teal);}
   .timefield.empty{color:var(--ink-soft);}
   .timefield .clockicon{width:15px;height:15px;flex-shrink:0;color:var(--ink-soft);}
   .timefield-row{display:flex;align-items:center;gap:6px;}
-  .timefield-clear{
-    width:38px;height:38px;flex-shrink:0;border-radius:10px;border:1px solid var(--line);
-    background:var(--paper-raised);display:flex;align-items:center;justify-content:center;
-    cursor:pointer;color:var(--ink-soft);
-  }
+  .timefield-clear{width:38px;height:38px;flex-shrink:0;border-radius:10px;border:1px solid var(--line);background:var(--paper-raised);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);}
   .timefield-clear:hover{border-color:var(--rust);color:var(--rust);}
 
-  /* ---------- late/early reason fields ---------- */
   .reasonfield{border-left:3px solid #B45A2E;padding-left:10px;}
   .reasonfield label{color:#B45A2E;}
 
-  /* ---------- Analog clock picker ---------- */
   .tp-sheet{max-width:320px;text-align:center;}
   .tp-header{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;}
   .tp-digital{font-family:var(--font-mono);font-size:34px;font-weight:600;color:var(--ink-soft);cursor:pointer;padding:2px 4px;border-radius:6px;}
   .tp-digital.active{color:var(--teal);background:var(--teal-soft);}
   .tp-colon{font-family:var(--font-mono);font-size:34px;font-weight:600;color:var(--ink-soft);}
   .tp-ampm{display:flex;flex-direction:column;gap:4px;margin-left:6px;}
-  .tp-ampm button{
-    font-family:var(--font-body);font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;
-    border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;
-  }
+  .tp-ampm button{font-family:var(--font-body);font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;}
   .tp-ampm button.active{background:var(--teal);border-color:var(--teal);color:#fff;}
   .tp-clockwrap{display:flex;justify-content:center;margin-bottom:18px;touch-action:none;}
   .tp-clockwrap svg{width:230px;height:230px;user-select:none;}
@@ -244,22 +156,22 @@
   .hint{font-size:11px;color:var(--ink-soft);margin-top:-6px;margin-bottom:14px;}
   .close-x{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--ink-soft);cursor:pointer;padding:4px;}
 
-  /* settings */
   .weekgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px;}
-  .wchip{
-    text-align:center;padding:9px 0;border-radius:9px;border:1px solid var(--line);
-    font-size:11px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:var(--paper);
-  }
+  .wchip{text-align:center;padding:9px 0;border-radius:9px;border:1px solid var(--line);font-size:11px;font-weight:600;cursor:pointer;color:var(--ink-soft);background:var(--paper);}
   .wchip.active{background:var(--gold-soft);border-color:var(--gold);color:var(--gold);}
 
-  footer.note{
-    text-align:center;color:var(--ink-soft);font-size:11px;margin-top:22px;line-height:1.6;padding:0 20px;
-  }
-  #toast{
-    position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
-    background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:10px;font-size:13px;
-    opacity:0;pointer-events:none;transition:all 0.25s ease;z-index:100;
-  }
+  /* Auth screen */
+  #authOverlay{z-index:70;background:var(--paper);align-items:center;}
+  #authOverlay .sheet{border-radius:18px;margin-bottom:0;max-width:400px;box-shadow:var(--shadow);border:1px solid var(--line);max-height:none;}
+  .auth-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+  .autherr{background:var(--rust-soft);color:var(--rust);font-size:12px;font-weight:600;padding:9px 11px;border-radius:9px;margin-bottom:12px;display:none;line-height:1.5;}
+  .userbox{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);margin-bottom:18px;font-size:12px;}
+  .userbox b{font-family:var(--font-mono);font-size:13px;}
+  .userbox button{border:1px solid var(--line);background:var(--paper-raised);border-radius:8px;padding:7px 12px;font-family:var(--font-body);font-size:12px;font-weight:600;color:var(--rust);cursor:pointer;}
+  .userbox button:hover{border-color:var(--rust);}
+
+  footer.note{text-align:center;color:var(--ink-soft);font-size:11px;margin-top:22px;line-height:1.6;padding:0 20px;}
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:all 0.25s ease;z-index:100;}
   #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
@@ -279,7 +191,6 @@
     </button>
   </header>
 
-  <!-- Today status card -->
   <div class="card" id="todayCard">
     <span class="punchdot" style="top:16px;"></span>
     <span class="punchdot" style="top:29px;"></span>
@@ -287,7 +198,6 @@
     <div id="todayContent"></div>
   </div>
 
-  <!-- Stats -->
   <div class="stats">
     <div class="stat present"><div class="num" id="statPresent">0</div><div class="lbl">উপস্থিত</div></div>
     <div class="stat missed"><div class="num" id="statMissed">0</div><div class="lbl">অনুপস্থিত</div></div>
@@ -299,22 +209,17 @@
     <div class="stat early"><div class="num" id="statEarly">0</div><div class="lbl">আগে বের</div></div>
   </div>
 
-  <!-- Calendar -->
   <div class="card">
     <span class="punchdot" style="top:16px;"></span>
     <span class="punchdot" style="top:29px;"></span>
     <span class="punchdot" style="bottom:16px;"></span>
     <div class="monthbar">
       <div class="navbtns">
-        <div class="navbtn" id="prevMonth">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        </div>
+        <div class="navbtn" id="prevMonth"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
       </div>
       <h2 id="monthLabel">—</h2>
       <div class="navbtns">
-        <div class="navbtn" id="nextMonth">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
+        <div class="navbtn" id="nextMonth"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
       </div>
     </div>
     <div class="weekdays" id="weekdayLabels"></div>
@@ -330,34 +235,63 @@
     </div>
   </div>
 
-  <!-- Export / backup -->
+  <!-- Export -->
   <div class="card">
     <span class="punchdot" style="top:16px;"></span>
-    <span class="punchdot" style="top:29px;"></span>
     <span class="punchdot" style="bottom:16px;"></span>
-    <div style="font-weight:600;font-size:13px;margin-bottom:10px;">ব্যাকআপ ও এক্সপোর্ট</div>
+    <div style="font-weight:600;font-size:13px;margin-bottom:10px;">এক্সপোর্ট</div>
     <div class="actions">
       <button class="btn" id="exportPdfBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
         এই মাসের PDF
       </button>
-      <button class="btn" id="exportJsonBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-        JSON ব্যাকআপ
-      </button>
-      <button class="btn" id="importJsonBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
-        JSON ইমপোর্ট
-      </button>
-      <input type="file" id="importFile" accept="application/json" style="display:none;">
     </div>
+    <details class="dd">
+      <summary>আরও অপশন — JSON ব্যাকআপ / ইমপোর্ট</summary>
+      <div class="ddbody">
+        <p class="ddhint">আপনার ডেটা ক্লাউডে সংরক্ষিত আছে। এটা শুধু বাড়তি নিরাপত্তার জন্য ব্যাকআপ, অথবা পুরনো (লোকাল) JSON ফাইল থেকে ডেটা তুলতে।</p>
+        <div class="actions" style="margin-top:0;">
+          <button class="btn" id="exportJsonBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+            JSON এক্সপোর্ট
+          </button>
+          <button class="btn" id="importJsonBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>
+            JSON ইমপোর্ট
+          </button>
+        </div>
+        <input type="file" id="importFile" accept="application/json" style="display:none;">
+      </div>
+    </details>
   </div>
 
   <footer class="note">
-    সব ডেটা শুধু আপনার এই ব্রাউজারে সংরক্ষিত হয় (কোনো সার্ভার/ডাটাবেস নেই)।
-    ব্রাউজার ডেটা মুছলে বা অ্যাপ আনইনস্টল করলে এই ডেটা হারিয়ে যাবে —
-    তাই মাঝে মাঝে "JSON ব্যাকআপ" নিয়ে রাখুন, অন্য ব্রাউজার/ডিভাইসে কাজ করতে সেই ফাইল ইমপোর্ট করুন।
+    আপনার ডেটা Supabase ক্লাউডে আপনার অ্যাকাউন্টে সংরক্ষিত হয় — যেকোনো ডিভাইস থেকে লগইন করলেই পাবেন।
   </footer>
+</div>
+
+<!-- Auth screen -->
+<div class="overlay show" id="authOverlay">
+  <div class="sheet">
+    <div class="auth-brand">
+      <div class="brand"><div class="mark"></div><div><h1>ডিউটি লগ</h1><small>Duty Log</small></div></div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" data-auth="login">লগইন</div>
+      <div class="tab" data-auth="signup">সাইন আপ</div>
+    </div>
+    <div class="autherr" id="authErr"></div>
+    <div class="field">
+      <label>ইউজারনেম</label>
+      <input type="text" id="authUser" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="যেমনঃ rahim_01">
+    </div>
+    <div class="field">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="authPass" autocomplete="current-password" placeholder="কমপক্ষে ৬ অক্ষর">
+    </div>
+    <div class="hint" id="authHint" style="margin-top:-4px;">ইউজারনেমে শুধু ইংরেজি অক্ষর, সংখ্যা, _ এবং . ব্যবহার করা যাবে (৩–২০ অক্ষর)।</div>
+    <button class="btn primary" id="authBtn" style="width:100%;">লগইন করুন</button>
+  </div>
 </div>
 
 <!-- Day entry modal -->
@@ -437,6 +371,12 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
     <h3>সেটিংস</h3>
+    <div class="subdate">অ্যাকাউন্ট</div>
+    <div class="userbox">
+      <span>লগইন করা আছে: <b id="userLabel">—</b></span>
+      <button type="button" id="logoutBtn">লগআউট</button>
+    </div>
+
     <div class="subdate">সাপ্তাহিক ছুটির দিন নির্বাচন করুন</div>
     <div class="weekgrid" id="weekgrid"></div>
     <div class="hint" style="margin-bottom:20px;">নির্বাচিত দিনগুলোতে এন্ট্রি না দিলে "অনুপস্থিত" হিসেবে দেখাবে না।</div>
@@ -467,7 +407,7 @@
 </div>
 
 <!-- Analog time picker -->
-<div class="overlay" id="tpOverlay">
+<div class="overlay" id="tpOverlay" style="z-index:60;">
   <div class="sheet tp-sheet">
     <div class="tp-header">
       <span class="tp-digital" id="tpHourDisplay">09</span>
@@ -490,20 +430,29 @@
 
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script>
 (function(){
   "use strict";
 
-  const DATA_KEY = 'dutylog_data_v1';
-  const SETTINGS_KEY = 'dutylog_settings_v1';
+  // ====== 1) নিজের Supabase প্রজেক্টের তথ্য এখানে বসান ======
+  const SUPABASE_URL = 'https://kzaetnpuvmuauomblqvx.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6YWV0bnB1dm11YXVvbWJscXZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1ODYwMzYsImV4cCI6MjEwNjE2MjAzNn0.QtbyWXwJFefKzZJKWLBhwG-5aQIVb57AJK2Bqe0JCZA';
+  // =========================================================
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const EMAIL_DOMAIN = 'dutylog.app'; // ইউজারনেম -> username@dutylog.app (Supabase Auth-এর জন্য)
+
   const WD_BN = ['রবি','সোম','মঙ্গল','বুধ','বৃহঃ','শুক্র','শনি'];
   const MONTH_BN = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  const DEFAULT_SETTINGS = { weekend:[5,6], dutyStart:'09:00', dutyEnd:'17:00' };
 
-  let data = loadData();
-  let settings = loadSettings();
-  let viewYear, viewMonth; // 0-indexed month
+  let data = {};
+  let settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  let currentUser = null;
+  let viewYear, viewMonth;
   let activeDate = null;
   let activeMode = 'work';
   let activeOffType = 'leave';
@@ -512,24 +461,147 @@
   viewYear = todayD.getFullYear();
   viewMonth = todayD.getMonth();
 
-  function loadData(){
-    try{ return JSON.parse(localStorage.getItem(DATA_KEY)) || {}; }
-    catch(e){ return {}; }
-  }
-  function saveData(){ localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
-  function loadSettings(){
-    try{
-      const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
-      if(s && Array.isArray(s.weekend)){
-        if(!s.dutyStart) s.dutyStart = '09:00';
-        if(!s.dutyEnd) s.dutyEnd = '17:00';
-        return s;
-      }
-    }catch(e){}
-    return { weekend: [5,6], dutyStart:'09:00', dutyEnd:'17:00' }; // default Fri-Sat weekend, 9AM-5PM duty
-  }
-  function saveSettings(){ localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
+  const $ = id => document.getElementById(id);
 
+  function normSettings(s){
+    const out = Object.assign({}, DEFAULT_SETTINGS, s || {});
+    if(!Array.isArray(out.weekend)) out.weekend = DEFAULT_SETTINGS.weekend.slice();
+    return out;
+  }
+
+  // ---------- Supabase data layer ----------
+  async function dbLoadAll(){
+    const [e, s] = await Promise.all([
+      sb.from('duty_entries').select('date,payload').eq('user_id', currentUser.id),
+      sb.from('duty_settings').select('settings').eq('user_id', currentUser.id).maybeSingle()
+    ]);
+    if(e.error) throw e.error;
+    if(s.error) throw s.error;
+    const d = {};
+    (e.data || []).forEach(r => { d[r.date] = r.payload; });
+    data = d;
+    settings = normSettings(s.data && s.data.settings);
+  }
+  async function dbSaveDay(key, entry){
+    const { error } = await sb.from('duty_entries').upsert(
+      { user_id: currentUser.id, date: key, payload: entry, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,date' });
+    if(error) throw error;
+  }
+  async function dbDeleteDay(key){
+    const { error } = await sb.from('duty_entries').delete().eq('user_id', currentUser.id).eq('date', key);
+    if(error) throw error;
+  }
+  async function dbSaveSettings(){
+    const { error } = await sb.from('duty_settings').upsert(
+      { user_id: currentUser.id, settings, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id' });
+    if(error) throw error;
+  }
+  async function dbBulkUpsert(obj){
+    const rows = Object.keys(obj).map(k => ({ user_id: currentUser.id, date: k, payload: obj[k] }));
+    for(let i=0; i<rows.length; i+=200){
+      const { error } = await sb.from('duty_entries').upsert(rows.slice(i,i+200), { onConflict: 'user_id,date' });
+      if(error) throw error;
+    }
+  }
+  async function dbDeleteAll(){
+    const { error } = await sb.from('duty_entries').delete().eq('user_id', currentUser.id);
+    if(error) throw error;
+  }
+
+  // ---------- Auth ----------
+  let authMode = 'login';
+  function setAuthMode(m){
+    authMode = m;
+    document.querySelectorAll('.tab[data-auth]').forEach(t=>t.classList.toggle('active', t.dataset.auth===m));
+    $('authBtn').textContent = m==='login' ? 'লগইন করুন' : 'অ্যাকাউন্ট খুলুন';
+    $('authPass').setAttribute('autocomplete', m==='login' ? 'current-password' : 'new-password');
+    showAuthErr('');
+  }
+  function showAuthErr(msg){
+    const el = $('authErr');
+    el.textContent = msg || '';
+    el.style.display = msg ? 'block' : 'none';
+  }
+  function mapAuthError(e){
+    const m = (e && e.message || '').toLowerCase();
+    if(m.includes('invalid login')) return 'ইউজারনেম বা পাসওয়ার্ড ভুল।';
+    if(m.includes('already registered') || m.includes('already been registered')) return 'এই ইউজারনেম আগেই নেওয়া হয়ে গেছে, অন্য একটা দিন।';
+    if(m.includes('rate limit') || m.includes('too many')) return 'অনেকবার চেষ্টা করা হয়েছে, একটু পরে আবার চেষ্টা করুন।';
+    if(m.includes('password')) return 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।';
+    if(m.includes('failed to fetch') || m.includes('network')) return 'ইন্টারনেট সংযোগ বা Supabase URL চেক করুন।';
+    return (e && e.message) || 'কিছু একটা সমস্যা হয়েছে।';
+  }
+  async function doAuth(){
+    const u = $('authUser').value.trim();
+    const p = $('authPass').value;
+    if(!/^[A-Za-z0-9_.]{3,20}$/.test(u)){ showAuthErr('ইউজারনেম ৩–২০ অক্ষরের হতে হবে, শুধু ইংরেজি অক্ষর, সংখ্যা, _ ও . চলবে।'); return; }
+    if(p.length < 6){ showAuthErr('পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।'); return; }
+    showAuthErr('');
+    const btn = $('authBtn');
+    btn.disabled = true;
+    const email = u.toLowerCase() + '@' + EMAIL_DOMAIN;
+    try{
+      if(authMode === 'signup'){
+        const { data: d, error } = await sb.auth.signUp({ email, password: p, options: { data: { username: u } } });
+        if(error) throw error;
+        if(!d.session) showAuthErr('অ্যাকাউন্ট তৈরি হয়েছে কিন্তু লগইন হয়নি — Supabase-এ "Confirm email" বন্ধ করা আছে কিনা দেখুন।');
+      } else {
+        const { error } = await sb.auth.signInWithPassword({ email, password: p });
+        if(error) throw error;
+      }
+    }catch(err){
+      showAuthErr(mapAuthError(err));
+    }finally{
+      btn.disabled = false;
+    }
+  }
+  document.querySelectorAll('.tab[data-auth]').forEach(t=>t.addEventListener('click', ()=>setAuthMode(t.dataset.auth)));
+  $('authBtn').addEventListener('click', doAuth);
+  ['authUser','authPass'].forEach(id=>$(id).addEventListener('keydown', e=>{ if(e.key==='Enter') doAuth(); }));
+
+  async function enterApp(user){
+    currentUser = user;
+    const uname = (user.user_metadata && user.user_metadata.username) || (user.email||'').split('@')[0];
+    $('userLabel').textContent = uname;
+    toast('ডেটা লোড হচ্ছে...');
+    try{
+      await dbLoadAll();
+    }catch(err){
+      toast('ডেটা লোড করা যায়নি: ' + (err.message || 'অজানা সমস্যা'));
+      data = {}; settings = normSettings();
+    }
+    viewYear = new Date().getFullYear();
+    viewMonth = new Date().getMonth();
+    $('authOverlay').classList.remove('show');
+    $('authPass').value = '';
+    renderAll();
+  }
+  function leaveApp(){
+    currentUser = null;
+    data = {};
+    settings = normSettings();
+    stopDutyTimer();
+    ['dayOverlay','settingsOverlay','tpOverlay'].forEach(id=>$(id).classList.remove('show'));
+    $('authOverlay').classList.add('show');
+    setAuthMode('login');
+  }
+  // NB: callback-এর ভেতরে সরাসরি await না করে setTimeout দিয়ে ছাড়া হয়েছে (Supabase-এর সুপারিশ)
+  sb.auth.onAuthStateChange((event, session)=>{
+    if(session && session.user){
+      if(!currentUser || currentUser.id !== session.user.id){
+        setTimeout(()=>enterApp(session.user), 0);
+      }
+    } else if(currentUser || event === 'SIGNED_OUT'){
+      setTimeout(leaveApp, 0);
+    }
+  });
+  $('logoutBtn').addEventListener('click', async ()=>{
+    await sb.auth.signOut();
+  });
+
+  // ---------- Helpers ----------
   function to12Hour(t24){
     if(!t24) return null;
     const [h,m] = t24.split(':').map(Number);
@@ -537,20 +609,15 @@
     let h12 = h % 12; if(h12===0) h12 = 12;
     return String(h12).padStart(2,'0')+':'+String(m).padStart(2,'0')+' '+ampm;
   }
-
-  function fmtDateKey(y,m,d){
-    return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-  }
+  function fmtDateKey(y,m,d){ return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
   function todayKey(){ const t=new Date(); return fmtDateKey(t.getFullYear(), t.getMonth(), t.getDate()); }
-
   function toast(msg){
-    const el = document.getElementById('toast');
+    const el = $('toast');
     el.textContent = msg;
     el.classList.add('show');
     clearTimeout(toast._t);
-    toast._t = setTimeout(()=>el.classList.remove('show'), 2200);
+    toast._t = setTimeout(()=>el.classList.remove('show'), 2400);
   }
-
   function timeToMinutes(t){
     if(!t) return null;
     const [h,m] = t.split(':').map(Number);
@@ -560,19 +627,11 @@
     const a = timeToMinutes(entry), b = timeToMinutes(exit);
     if(a==null || b==null) return null;
     let diff = b - a;
-    if(diff < 0) diff += 24*60; // overnight shift fallback
+    if(diff < 0) diff += 24*60;
     const h = Math.floor(diff/60), m = diff%60;
     return {hours:h, minutes:m, totalMinutes:diff, label: h+' ঘ ' + m + ' মি'};
   }
-
-  function isWeekend(dateObj){
-    return settings.weekend.includes(dateObj.getDay());
-  }
-
-  // "leave" = employee's own leave (still an expected duty day, just absent).
-  // "holiday" = office itself closed (no duty hour expected at all that day).
-  // Legacy off-entries saved before this feature was added have no offType —
-  // those are treated as 'holiday' so old stats/behavior don't suddenly shift.
+  function isWeekend(dateObj){ return settings.weekend.includes(dateObj.getDay()); }
   function effectiveOffType(entry){
     if(entry && entry.type === 'off' && entry.offType) return entry.offType;
     return 'holiday';
@@ -584,30 +643,17 @@
     const entry = data[key];
     const isToday = key === todayKey();
     const isFuture = dObj > new Date(new Date().setHours(0,0,0,0));
-
     if(entry && entry.type === 'work'){
-      if(entry.exit){
-        return {status:'worked', key, entry};
-      }
-      // entry logged but no exit yet
+      if(entry.exit) return {status:'worked', key, entry};
       return {status: isToday ? 'in-progress' : 'incomplete', key, entry};
     }
-    if(entry && entry.type === 'off'){
-      return {status:'off', key, entry};
-    }
-    if(isFuture){
-      return {status:'future', key, entry:null};
-    }
-    if(isWeekend(dObj)){
-      return {status:'weekend', key, entry:null};
-    }
-    if(isToday){
-      return {status:'today-pending', key, entry:null};
-    }
+    if(entry && entry.type === 'off') return {status:'off', key, entry};
+    if(isFuture) return {status:'future', key, entry:null};
+    if(isWeekend(dObj)) return {status:'weekend', key, entry:null};
+    if(isToday) return {status:'today-pending', key, entry:null};
     return {status:'missed', key, entry:null};
   }
 
-  // Returns {late:bool, early:bool} for a work entry, based on configured duty hours.
   function getFlags(entry){
     const flags = {late:false, early:false};
     if(!entry || entry.type !== 'work') return flags;
@@ -622,8 +668,6 @@
     return flags;
   }
 
-  // Duty-hours-per-day derived from settings (handles an overnight shift where
-  // end time is numerically before start time).
   function dailyDutyMinutes(){
     const s = timeToMinutes(settings.dutyStart);
     const e = timeToMinutes(settings.dutyEnd);
@@ -633,14 +677,9 @@
     return diff;
   }
 
-  // Aggregates a full month: present/missed/leave/holiday/weekend counts,
-  // actual worked minutes, late/early counts, and the "expected" duty days &
-  // minutes (weekdays that are not a holiday — leave days still count as
-  // expected since the employee was supposed to be on duty).
   function computeMonthSummary(y,m){
     const daysInMonth = new Date(y, m+1, 0).getDate();
     const dailyMin = dailyDutyMinutes();
-
     let present=0, missed=0, leave=0, holiday=0, weekend=0;
     let totalWorkedMin=0, late=0, early=0;
     let expectedDays=0, expectedMin=0;
@@ -649,25 +688,15 @@
       const info = getDayStatus(y,m,d);
       const dObj = new Date(y,m,d);
       const wknd = isWeekend(dObj);
-
       if(info.status === 'future') continue;
-
       if(info.status === 'off'){
         const ot = effectiveOffType(info.entry);
-        if(ot === 'holiday'){
-          holiday++;
-        } else {
-          leave++;
-          if(!wknd){ expectedDays++; expectedMin += dailyMin; }
-        }
+        if(ot === 'holiday'){ holiday++; }
+        else { leave++; if(!wknd){ expectedDays++; expectedMin += dailyMin; } }
         continue;
       }
-
       if(info.status === 'weekend'){ weekend++; continue; }
-
-      // ordinary duty day: worked / in-progress / incomplete / missed / today-pending
       expectedDays++; expectedMin += dailyMin;
-
       if(info.status === 'worked'){
         present++;
         const dur = durationLabel(info.entry.entry, info.entry.exit);
@@ -682,15 +711,13 @@
       } else if(info.status === 'missed'){
         missed++;
       }
-      // 'today-pending' — not yet decided either way, no count.
     }
-
     return {present, missed, leave, holiday, weekend, totalWorkedMin, late, early, expectedDays, expectedMin, dailyMin};
   }
 
   // ---------- Rendering ----------
   function renderWeekdayLabels(){
-    const wrap = document.getElementById('weekdayLabels');
+    const wrap = $('weekdayLabels');
     wrap.innerHTML = '';
     WD_BN.forEach((w,i)=>{
       const s = document.createElement('span');
@@ -701,8 +728,8 @@
   }
 
   function renderCalendar(){
-    document.getElementById('monthLabel').textContent = MONTH_BN[viewMonth] + ' ' + viewYear;
-    const grid = document.getElementById('calGrid');
+    $('monthLabel').textContent = MONTH_BN[viewMonth] + ' ' + viewYear;
+    const grid = $('calGrid');
     grid.innerHTML = '';
     const firstDay = new Date(viewYear, viewMonth, 1).getDay();
     const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
@@ -770,14 +797,14 @@
 
   function renderStats(){
     const s = computeMonthSummary(viewYear, viewMonth);
-    document.getElementById('statPresent').textContent = s.present;
-    document.getElementById('statMissed').textContent = s.missed;
-    document.getElementById('statLeave').textContent = s.leave;
-    document.getElementById('statHoliday').textContent = s.holiday;
-    document.getElementById('statHours').textContent = Math.floor(s.totalWorkedMin/60)+'ঘ '+String(s.totalWorkedMin%60).padStart(2,'0')+'মি';
-    document.getElementById('statExpected').textContent = Math.floor(s.expectedMin/60)+'ঘ '+String(s.expectedMin%60).padStart(2,'0')+'মি';
-    document.getElementById('statLate').textContent = s.late;
-    document.getElementById('statEarly').textContent = s.early;
+    $('statPresent').textContent = s.present;
+    $('statMissed').textContent = s.missed;
+    $('statLeave').textContent = s.leave;
+    $('statHoliday').textContent = s.holiday;
+    $('statHours').textContent = Math.floor(s.totalWorkedMin/60)+'ঘ '+String(s.totalWorkedMin%60).padStart(2,'0')+'মি';
+    $('statExpected').textContent = Math.floor(s.expectedMin/60)+'ঘ '+String(s.expectedMin%60).padStart(2,'0')+'মি';
+    $('statLate').textContent = s.late;
+    $('statEarly').textContent = s.early;
   }
 
   // ---------- Duty countdown timer ----------
@@ -787,15 +814,13 @@
   }
   function formatHMS(totalSeconds){
     const abs = Math.max(0, Math.floor(totalSeconds));
-    const h = Math.floor(abs/3600);
-    const m = Math.floor((abs%3600)/60);
-    const s = abs%60;
+    const h = Math.floor(abs/3600), m = Math.floor((abs%3600)/60), s = abs%60;
     const pad = n=>String(n).padStart(2,'0');
     return pad(h)+':'+pad(m)+':'+pad(s);
   }
   function updateDutyTimer(entryTime24){
-    const valEl = document.getElementById('dutyTimerVal');
-    const lblEl = document.getElementById('dutyTimerLbl');
+    const valEl = $('dutyTimerVal');
+    const lblEl = $('dutyTimerLbl');
     if(!valEl){ stopDutyTimer(); return; }
     if(!settings.dutyEnd || !entryTime24){ valEl.textContent = '—'; return; }
     const [eh, em] = entryTime24.split(':').map(Number);
@@ -803,7 +828,6 @@
     const now = new Date();
     const entryDt = new Date(now.getFullYear(), now.getMonth(), now.getDate(), eh, em, 0, 0);
     let target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), xh, xm, 0, 0);
-    // overnight duty: end-clock time falls before entry-clock time, so it's on the next day
     if(target <= entryDt) target = new Date(target.getTime() + 24*60*60000);
     const remainingMs = target - now;
     if(remainingMs > 0){
@@ -825,7 +849,7 @@
   function renderTodayCard(){
     const key = todayKey();
     const entry = data[key];
-    const el = document.getElementById('todayContent');
+    const el = $('todayContent');
     const now = new Date();
     const dateStr = now.getDate()+' '+MONTH_BN[now.getMonth()]+' '+now.getFullYear();
 
@@ -844,22 +868,24 @@
           <div style="font-size:12px;color:var(--ink-soft);">ডিউটি করেছেন আজ</div>
         </div>
         <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">${to12Hour(entry.entry)} → ${to12Hour(entry.exit)}</div>
-        ${flagNote ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;">${flagNote}</div>` : ''}
+        ${flagNote ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;"></div>` : ''}
         <button class="btn" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এডিট করুন</button>
       `;
+      const fn = el.querySelector('div[style*="B45A2E"]'); if(fn) fn.textContent = flagNote;
     } else if(entry && entry.type === 'work' && !entry.exit){
       const flags = getFlags(entry);
       el.innerHTML = `
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
         <div style="font-size:16px;font-weight:600;color:var(--navy);">এখনো ডিউটিতে আছেন</div>
         <div style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:6px;">এন্ট্রি: ${to12Hour(entry.entry)}</div>
-        ${flags.late ? `<div style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;">দেরিতে ঢুকেছেন${entry.lateReason ? ' — '+entry.lateReason : ''}</div>` : ''}
+        ${flags.late ? `<div id="lateNote" style="font-size:12px;color:#B45A2E;margin-top:4px;font-weight:600;"></div>` : ''}
         <div style="margin-top:12px;padding:12px 14px;background:var(--navy-soft);border-radius:12px;text-align:center;">
           <div style="font-size:11px;color:var(--ink-soft);font-weight:600;margin-bottom:4px;" id="dutyTimerLbl">ডিউটি শেষ হতে বাকি</div>
           <div style="font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--navy);letter-spacing:0.02em;" id="dutyTimerVal">--:--:--</div>
         </div>
         <button class="btn primary" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এক্সিট টাইম দিন</button>
       `;
+      const ln = $('lateNote'); if(ln) ln.textContent = 'দেরিতে ঢুকেছেন' + (entry.lateReason ? ' — '+entry.lateReason : '');
       startDutyTimer(entry.entry);
     } else if(entry && entry.type === 'off'){
       stopDutyTimer();
@@ -868,9 +894,10 @@
       const color = ot === 'holiday' ? 'var(--slate)' : 'var(--gold)';
       el.innerHTML = `
         <div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">আজ · ${dateStr}</div>
-        <div style="font-size:16px;font-weight:600;color:${color};">${label}${entry.label? ' — '+entry.label : ''}</div>
+        <div id="offNote" style="font-size:16px;font-weight:600;color:${color};"></div>
         <button class="btn" style="margin-top:12px;width:100%;" onclick="window.dispatchEvent(new CustomEvent('openToday'))">এডিট করুন</button>
       `;
+      $('offNote').textContent = label + (entry.label ? ' — '+entry.label : '');
     } else {
       stopDutyTimer();
       el.innerHTML = `
@@ -880,7 +907,7 @@
       `;
     }
   }
-  window.addEventListener('openToday', ()=>openDaySheet(todayKey()));
+  window.addEventListener('openToday', ()=>{ if(currentUser) openDaySheet(todayKey()); });
 
   function renderAll(){
     renderWeekdayLabels();
@@ -890,67 +917,57 @@
   }
 
   // ---------- Day sheet ----------
-  let entryTimeValue = null; // 24hr "HH:MM" or null
+  let entryTimeValue = null;
   let exitTimeValue = null;
 
   function updateReasonFieldsVisibility(){
     const flags = getFlags({type:'work', entry: entryTimeValue, exit: exitTimeValue});
-    document.getElementById('lateReasonField').style.display = flags.late ? 'block' : 'none';
-    document.getElementById('earlyReasonField').style.display = flags.early ? 'block' : 'none';
+    $('lateReasonField').style.display = flags.late ? 'block' : 'none';
+    $('earlyReasonField').style.display = flags.early ? 'block' : 'none';
   }
-
   function refreshTimeFieldUI(){
-    const eBtn = document.getElementById('entryTimeBtn');
-    const eLbl = document.getElementById('entryTimeLabel');
+    const eBtn = $('entryTimeBtn'), eLbl = $('entryTimeLabel');
     if(entryTimeValue){ eLbl.textContent = to12Hour(entryTimeValue); eBtn.classList.remove('empty'); }
     else { eLbl.textContent = 'সময় নির্বাচন করুন'; eBtn.classList.add('empty'); }
-
-    const xBtn = document.getElementById('exitTimeBtn');
-    const xLbl = document.getElementById('exitTimeLabel');
+    const xBtn = $('exitTimeBtn'), xLbl = $('exitTimeLabel');
     if(exitTimeValue){ xLbl.textContent = to12Hour(exitTimeValue); xBtn.classList.remove('empty'); }
     else { xLbl.textContent = 'এখনো দিইনি'; xBtn.classList.add('empty'); }
-
     updateDurationHint();
     updateReasonFieldsVisibility();
   }
-
   function setOffTypeTab(type){
     activeOffType = type;
     document.querySelectorAll('.offtypetab').forEach(t=>t.classList.toggle('active', t.dataset.offtype===type));
   }
-
   function openDaySheet(key){
     activeDate = key;
     const [y,m,d] = key.split('-').map(Number);
     const dObj = new Date(y, m-1, d);
-    document.getElementById('sheetDate').textContent = d+' '+MONTH_BN[m-1]+' '+y+' · '+WD_BN[dObj.getDay()]+'বার';
-
+    $('sheetDate').textContent = d+' '+MONTH_BN[m-1]+' '+y+' · '+WD_BN[dObj.getDay()]+'বার';
     const entry = data[key];
     activeMode = (entry && entry.type === 'off') ? 'off' : 'work';
     setTab(activeMode);
-
     entryTimeValue = (entry && entry.type==='work') ? entry.entry : null;
     exitTimeValue = (entry && entry.type==='work' && entry.exit) ? entry.exit : null;
-    document.getElementById('lateReasonInput').value = (entry && entry.type==='work' && entry.lateReason) ? entry.lateReason : '';
-    document.getElementById('earlyReasonInput').value = (entry && entry.type==='work' && entry.earlyReason) ? entry.earlyReason : '';
+    $('lateReasonInput').value = (entry && entry.type==='work' && entry.lateReason) ? entry.lateReason : '';
+    $('earlyReasonInput').value = (entry && entry.type==='work' && entry.earlyReason) ? entry.earlyReason : '';
     refreshTimeFieldUI();
-    document.getElementById('offLabel').value = (entry && entry.type==='off') ? (entry.label||'') : '';
+    $('offLabel').value = (entry && entry.type==='off') ? (entry.label||'') : '';
     setOffTypeTab((entry && entry.type==='off') ? effectiveOffType(entry) : 'leave');
-
-    document.getElementById('dayOverlay').classList.add('show');
+    $('dayOverlay').classList.add('show');
   }
   function closeDaySheet(){
-    document.getElementById('dayOverlay').classList.remove('show');
+    $('dayOverlay').classList.remove('show');
     activeDate = null;
   }
   function setTab(mode){
     activeMode = mode;
     document.querySelectorAll('.tab[data-mode]').forEach(t=>t.classList.toggle('active', t.dataset.mode===mode));
-    document.getElementById('workFields').style.display = mode==='work' ? 'block':'none';
-    document.getElementById('offFields').style.display = mode==='off' ? 'block':'none';
+    $('workFields').style.display = mode==='work' ? 'block':'none';
+    $('offFields').style.display = mode==='off' ? 'block':'none';
   }
   function updateDurationHint(){
-    const hint = document.getElementById('durationHint');
+    const hint = $('durationHint');
     if(entryTimeValue && exitTimeValue){
       const dur = durationLabel(entryTimeValue, exitTimeValue);
       hint.textContent = dur ? ('মোট সময়: '+dur.label) : '';
@@ -961,123 +978,118 @@
     }
   }
 
-  document.querySelectorAll('.tab[data-mode]').forEach(t=>{
-    t.addEventListener('click', ()=>setTab(t.dataset.mode));
+  document.querySelectorAll('.tab[data-mode]').forEach(t=>t.addEventListener('click', ()=>setTab(t.dataset.mode)));
+  document.querySelectorAll('.offtypetab').forEach(t=>t.addEventListener('click', ()=>setOffTypeTab(t.dataset.offtype)));
+  $('entryTimeBtn').addEventListener('click', ()=>{
+    openTimePicker(entryTimeValue || settings.dutyStart, (val)=>{ entryTimeValue = val; refreshTimeFieldUI(); });
   });
-  document.querySelectorAll('.offtypetab').forEach(t=>{
-    t.addEventListener('click', ()=>setOffTypeTab(t.dataset.offtype));
+  $('exitTimeBtn').addEventListener('click', ()=>{
+    openTimePicker(exitTimeValue || settings.dutyEnd, (val)=>{ exitTimeValue = val; refreshTimeFieldUI(); });
   });
-  document.getElementById('entryTimeBtn').addEventListener('click', ()=>{
-    openTimePicker(entryTimeValue || settings.dutyStart, (val)=>{
-      entryTimeValue = val;
-      refreshTimeFieldUI();
-    });
-  });
-  document.getElementById('exitTimeBtn').addEventListener('click', ()=>{
-    openTimePicker(exitTimeValue || settings.dutyEnd, (val)=>{
-      exitTimeValue = val;
-      refreshTimeFieldUI();
-    });
-  });
-  document.getElementById('exitTimeClear').addEventListener('click', (e)=>{
+  $('exitTimeClear').addEventListener('click', (e)=>{
     e.stopPropagation();
     exitTimeValue = null;
     refreshTimeFieldUI();
   });
-  document.getElementById('closeDaySheet').addEventListener('click', closeDaySheet);
-  document.getElementById('dayOverlay').addEventListener('click', (e)=>{ if(e.target.id==='dayOverlay') closeDaySheet(); });
+  $('closeDaySheet').addEventListener('click', closeDaySheet);
+  $('dayOverlay').addEventListener('click', (e)=>{ if(e.target.id==='dayOverlay') closeDaySheet(); });
 
-  document.getElementById('saveDayBtn').addEventListener('click', ()=>{
-    if(!activeDate) return;
+  $('saveDayBtn').addEventListener('click', async ()=>{
+    if(!activeDate || !currentUser) return;
+    let entryObj;
     if(activeMode === 'work'){
       if(!entryTimeValue){ toast('এন্ট্রি টাইম নির্বাচন করুন'); return; }
       const flags = getFlags({type:'work', entry: entryTimeValue, exit: exitTimeValue});
-      const entryObj = {type:'work', entry:entryTimeValue, exit: exitTimeValue || null};
+      entryObj = {type:'work', entry:entryTimeValue, exit: exitTimeValue || null};
       if(flags.late){
-        const lr = document.getElementById('lateReasonInput').value.trim();
+        const lr = $('lateReasonInput').value.trim();
         if(lr) entryObj.lateReason = lr;
       }
       if(flags.early){
-        const er = document.getElementById('earlyReasonInput').value.trim();
+        const er = $('earlyReasonInput').value.trim();
         if(er) entryObj.earlyReason = er;
       }
-      data[activeDate] = entryObj;
     } else {
-      const lbl = document.getElementById('offLabel').value.trim();
-      data[activeDate] = {type:'off', label: lbl, offType: activeOffType};
+      const lbl = $('offLabel').value.trim();
+      entryObj = {type:'off', label: lbl, offType: activeOffType};
     }
-    saveData();
-    renderAll();
-    closeDaySheet();
-    toast('সংরক্ষণ করা হয়েছে');
+    const btn = $('saveDayBtn');
+    btn.disabled = true;
+    try{
+      await dbSaveDay(activeDate, entryObj);
+      data[activeDate] = entryObj;
+      renderAll();
+      closeDaySheet();
+      toast('সংরক্ষণ করা হয়েছে');
+    }catch(err){
+      toast('সংরক্ষণ হয়নি: ' + (err.message || 'নেটওয়ার্ক সমস্যা'));
+    }finally{
+      btn.disabled = false;
+    }
   });
 
-  document.getElementById('clearDayBtn').addEventListener('click', ()=>{
-    if(!activeDate) return;
-    delete data[activeDate];
-    saveData();
-    renderAll();
-    closeDaySheet();
-    toast('মুছে ফেলা হয়েছে');
+  $('clearDayBtn').addEventListener('click', async ()=>{
+    if(!activeDate || !currentUser) return;
+    try{
+      await dbDeleteDay(activeDate);
+      delete data[activeDate];
+      renderAll();
+      closeDaySheet();
+      toast('মুছে ফেলা হয়েছে');
+    }catch(err){
+      toast('মোছা যায়নি: ' + (err.message || 'নেটওয়ার্ক সমস্যা'));
+    }
   });
 
   // ---------- Month navigation ----------
-  document.getElementById('prevMonth').addEventListener('click', ()=>{
-    viewMonth--; if(viewMonth<0){viewMonth=11; viewYear--;}
-    renderAll();
-  });
-  document.getElementById('nextMonth').addEventListener('click', ()=>{
-    viewMonth++; if(viewMonth>11){viewMonth=0; viewYear++;}
-    renderAll();
-  });
+  $('prevMonth').addEventListener('click', ()=>{ viewMonth--; if(viewMonth<0){viewMonth=11; viewYear--;} renderAll(); });
+  $('nextMonth').addEventListener('click', ()=>{ viewMonth++; if(viewMonth>11){viewMonth=0; viewYear++;} renderAll(); });
 
   // ---------- Settings ----------
+  let draftSettings = null; // সেভ চাপার আগে পর্যন্ত খসড়া
   function renderWeekgrid(){
-    const wrap = document.getElementById('weekgrid');
+    const wrap = $('weekgrid');
     wrap.innerHTML = '';
     WD_BN.forEach((w,i)=>{
       const c = document.createElement('div');
-      c.className = 'wchip' + (settings.weekend.includes(i) ? ' active':'');
+      c.className = 'wchip' + (draftSettings.weekend.includes(i) ? ' active':'');
       c.textContent = w;
-      c.dataset.idx = i;
       c.addEventListener('click', ()=>{
-        const idx = i;
-        const pos = settings.weekend.indexOf(idx);
-        if(pos>-1) settings.weekend.splice(pos,1); else settings.weekend.push(idx);
+        const pos = draftSettings.weekend.indexOf(i);
+        if(pos>-1) draftSettings.weekend.splice(pos,1); else draftSettings.weekend.push(i);
         renderWeekgrid();
       });
       wrap.appendChild(c);
     });
   }
-  document.getElementById('settingsBtn').addEventListener('click', ()=>{
+  $('settingsBtn').addEventListener('click', ()=>{
+    draftSettings = JSON.parse(JSON.stringify(settings));
     renderWeekgrid();
-    document.getElementById('dutyStartLabel').textContent = to12Hour(settings.dutyStart);
-    document.getElementById('dutyEndLabel').textContent = to12Hour(settings.dutyEnd);
-    document.getElementById('settingsOverlay').classList.add('show');
+    $('dutyStartLabel').textContent = to12Hour(draftSettings.dutyStart);
+    $('dutyEndLabel').textContent = to12Hour(draftSettings.dutyEnd);
+    $('settingsOverlay').classList.add('show');
   });
-  document.getElementById('closeSettingsSheet').addEventListener('click', ()=>{
-    document.getElementById('settingsOverlay').classList.remove('show');
+  $('closeSettingsSheet').addEventListener('click', ()=>$('settingsOverlay').classList.remove('show'));
+  $('settingsOverlay').addEventListener('click', (e)=>{ if(e.target.id==='settingsOverlay') e.currentTarget.classList.remove('show'); });
+  $('dutyStartBtn').addEventListener('click', ()=>{
+    openTimePicker(draftSettings.dutyStart, (val)=>{ draftSettings.dutyStart = val; $('dutyStartLabel').textContent = to12Hour(val); });
   });
-  document.getElementById('settingsOverlay').addEventListener('click', (e)=>{
-    if(e.target.id==='settingsOverlay') e.currentTarget.classList.remove('show');
+  $('dutyEndBtn').addEventListener('click', ()=>{
+    openTimePicker(draftSettings.dutyEnd, (val)=>{ draftSettings.dutyEnd = val; $('dutyEndLabel').textContent = to12Hour(val); });
   });
-  document.getElementById('dutyStartBtn').addEventListener('click', ()=>{
-    openTimePicker(settings.dutyStart, (val)=>{
-      settings.dutyStart = val;
-      document.getElementById('dutyStartLabel').textContent = to12Hour(val);
-    });
-  });
-  document.getElementById('dutyEndBtn').addEventListener('click', ()=>{
-    openTimePicker(settings.dutyEnd, (val)=>{
-      settings.dutyEnd = val;
-      document.getElementById('dutyEndLabel').textContent = to12Hour(val);
-    });
-  });
-  document.getElementById('saveSettingsBtn').addEventListener('click', ()=>{
-    saveSettings();
-    document.getElementById('settingsOverlay').classList.remove('show');
-    renderAll();
-    toast('সেটিংস সংরক্ষণ করা হয়েছে');
+  $('saveSettingsBtn').addEventListener('click', async ()=>{
+    if(!currentUser) return;
+    const prev = settings;
+    settings = draftSettings;
+    try{
+      await dbSaveSettings();
+      $('settingsOverlay').classList.remove('show');
+      renderAll();
+      toast('সেটিংস সংরক্ষণ করা হয়েছে');
+    }catch(err){
+      settings = prev;
+      toast('সেটিংস সেভ হয়নি: ' + (err.message || 'নেটওয়ার্ক সমস্যা'));
+    }
   });
 
   // ---------- Analog clock time picker ----------
@@ -1106,18 +1118,15 @@
     return el;
   }
   function tpBuildFace(){
-    const svg = document.getElementById('tpClockSvg');
+    const svg = $('tpClockSvg');
     svg.innerHTML = '';
     svg.appendChild(svgEl('circle', {cx:100, cy:100, r:90, class:'tp-face'}));
-    const hand = svgEl('line', {id:'tpHand', x1:100, y1:100, x2:100, y2:30, class:'tp-hand'});
-    svg.appendChild(hand);
-    const knob = svgEl('circle', {id:'tpKnob', cx:100, cy:30, r:15, class:'tp-knob'});
-    svg.appendChild(knob);
+    svg.appendChild(svgEl('line', {id:'tpHand', x1:100, y1:100, x2:100, y2:30, class:'tp-hand'}));
+    svg.appendChild(svgEl('circle', {id:'tpKnob', cx:100, cy:30, r:15, class:'tp-knob'}));
     svg.appendChild(svgEl('circle', {cx:100, cy:100, r:4, class:'tp-center'}));
     for(let k=0;k<12;k++){
       const pt = tpPolar(k*30, 70);
-      const text = svgEl('text', {x:pt.x, y:pt.y+5, class:'tp-num', 'data-k':k, 'text-anchor':'middle'});
-      svg.appendChild(text);
+      svg.appendChild(svgEl('text', {x:pt.x, y:pt.y+5, class:'tp-num', 'data-k':k, 'text-anchor':'middle'}));
     }
   }
   function tpUpdateNumbers(){
@@ -1129,33 +1138,25 @@
   function tpUpdateHand(){
     const angle = tpState.mode==='hour' ? (tpState.hour12%12)*30 : tpState.minute*6;
     const pt = tpPolar(angle, 70);
-    document.getElementById('tpHand').setAttribute('x2', pt.x);
-    document.getElementById('tpHand').setAttribute('y2', pt.y);
-    document.getElementById('tpKnob').setAttribute('cx', pt.x);
-    document.getElementById('tpKnob').setAttribute('cy', pt.y);
+    $('tpHand').setAttribute('x2', pt.x);
+    $('tpHand').setAttribute('y2', pt.y);
+    $('tpKnob').setAttribute('cx', pt.x);
+    $('tpKnob').setAttribute('cy', pt.y);
   }
   function tpUpdateDigital(){
-    document.getElementById('tpHourDisplay').textContent = String(tpState.hour12).padStart(2,'0');
-    document.getElementById('tpMinuteDisplay').textContent = String(tpState.minute).padStart(2,'0');
-    document.getElementById('tpHourDisplay').classList.toggle('active', tpState.mode==='hour');
-    document.getElementById('tpMinuteDisplay').classList.toggle('active', tpState.mode==='minute');
-    document.getElementById('tpAM').classList.toggle('active', tpState.ampm==='AM');
-    document.getElementById('tpPM').classList.toggle('active', tpState.ampm==='PM');
+    $('tpHourDisplay').textContent = String(tpState.hour12).padStart(2,'0');
+    $('tpMinuteDisplay').textContent = String(tpState.minute).padStart(2,'0');
+    $('tpHourDisplay').classList.toggle('active', tpState.mode==='hour');
+    $('tpMinuteDisplay').classList.toggle('active', tpState.mode==='minute');
+    $('tpAM').classList.toggle('active', tpState.ampm==='AM');
+    $('tpPM').classList.toggle('active', tpState.ampm==='PM');
   }
-  function tpRenderAll(){
-    tpUpdateNumbers();
-    tpUpdateHand();
-    tpUpdateDigital();
-  }
+  function tpRenderAll(){ tpUpdateNumbers(); tpUpdateHand(); tpUpdateDigital(); }
   function tpAngleFromEvent(e){
-    const svg = document.getElementById('tpClockSvg');
-    const rect = svg.getBoundingClientRect();
-    const clientX = e.clientX;
-    const clientY = e.clientY;
-    const x = (clientX - rect.left) / rect.width * 200;
-    const y = (clientY - rect.top) / rect.height * 200;
-    const dx = x - 100, dy = y - 100;
-    let angle = Math.atan2(dx, -dy) * 180 / Math.PI;
+    const rect = $('tpClockSvg').getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * 200;
+    const y = (e.clientY - rect.top) / rect.height * 200;
+    let angle = Math.atan2(x - 100, -(y - 100)) * 180 / Math.PI;
     if(angle < 0) angle += 360;
     return angle;
   }
@@ -1165,53 +1166,35 @@
       let k = Math.round(angle/30) % 12;
       tpState.hour12 = k===0 ? 12 : k;
     } else {
-      let m = Math.round(angle/6) % 60;
-      tpState.minute = m;
+      tpState.minute = Math.round(angle/6) % 60;
     }
     tpRenderAll();
   }
-  function tpPointerDown(e){
-    e.preventDefault();
-    tpState.dragging = true;
-    tpHandlePoint(e);
-  }
-  function tpPointerMove(e){
-    if(!tpState.dragging) return;
-    e.preventDefault();
-    tpHandlePoint(e);
-  }
-  function tpPointerUp(e){
+  function tpPointerDown(e){ e.preventDefault(); tpState.dragging = true; tpHandlePoint(e); }
+  function tpPointerMove(e){ if(!tpState.dragging) return; e.preventDefault(); tpHandlePoint(e); }
+  function tpPointerUp(){
     if(!tpState.dragging) return;
     tpState.dragging = false;
-    if(tpState.mode === 'hour'){
-      tpState.mode = 'minute';
-      tpRenderAll();
-    }
+    if(tpState.mode === 'hour'){ tpState.mode = 'minute'; tpRenderAll(); }
   }
   (function initClockOnce(){
     tpBuildFace();
-    const svg = document.getElementById('tpClockSvg');
-    svg.addEventListener('pointerdown', tpPointerDown);
+    $('tpClockSvg').addEventListener('pointerdown', tpPointerDown);
     window.addEventListener('pointermove', tpPointerMove);
     window.addEventListener('pointerup', tpPointerUp);
   })();
-  document.getElementById('tpHourDisplay').addEventListener('click', ()=>{ tpState.mode='hour'; tpRenderAll(); });
-  document.getElementById('tpMinuteDisplay').addEventListener('click', ()=>{ tpState.mode='minute'; tpRenderAll(); });
-  document.getElementById('tpAM').addEventListener('click', ()=>{ tpState.ampm='AM'; tpRenderAll(); });
-  document.getElementById('tpPM').addEventListener('click', ()=>{ tpState.ampm='PM'; tpRenderAll(); });
-  document.getElementById('tpCancel').addEventListener('click', ()=>{
-    document.getElementById('tpOverlay').classList.remove('show');
-    tpState.callback = null;
-  });
-  document.getElementById('tpOk').addEventListener('click', ()=>{
+  $('tpHourDisplay').addEventListener('click', ()=>{ tpState.mode='hour'; tpRenderAll(); });
+  $('tpMinuteDisplay').addEventListener('click', ()=>{ tpState.mode='minute'; tpRenderAll(); });
+  $('tpAM').addEventListener('click', ()=>{ tpState.ampm='AM'; tpRenderAll(); });
+  $('tpPM').addEventListener('click', ()=>{ tpState.ampm='PM'; tpRenderAll(); });
+  $('tpCancel').addEventListener('click', ()=>{ $('tpOverlay').classList.remove('show'); tpState.callback = null; });
+  $('tpOk').addEventListener('click', ()=>{
     const val = tpTo24(tpState.hour12, tpState.minute, tpState.ampm);
-    document.getElementById('tpOverlay').classList.remove('show');
+    $('tpOverlay').classList.remove('show');
     if(tpState.callback) tpState.callback(val);
     tpState.callback = null;
   });
-  document.getElementById('tpOverlay').addEventListener('click', (e)=>{
-    if(e.target.id==='tpOverlay') document.getElementById('tpOverlay').classList.remove('show');
-  });
+  $('tpOverlay').addEventListener('click', (e)=>{ if(e.target.id==='tpOverlay') $('tpOverlay').classList.remove('show'); });
 
   function openTimePicker(initial24, callback){
     const parsed = tpFrom24(initial24);
@@ -1221,24 +1204,20 @@
     tpState.mode = 'hour';
     tpState.callback = callback;
     tpRenderAll();
-    document.getElementById('tpOverlay').classList.add('show');
+    $('tpOverlay').classList.add('show');
   }
 
   // ---------- PDF export ----------
-  // NOTE: jsPDF's built-in fonts only contain Latin glyphs. Bengali text would
-  // render as garbled boxes, so the PDF itself is generated in English only.
   const MONTH_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const WD_EN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
   function asciiSafe(label){
     if(!label) return '';
-    // Strip any non-ASCII characters (e.g. Bengali reason text) to avoid
-    // garbled output; keep numbers/Latin letters/punctuation if present.
     const ascii = label.replace(/[^\x00-\x7F]/g, '').trim();
     return ascii || '(reason in Bangla - see app)';
   }
 
-  document.getElementById('exportPdfBtn').addEventListener('click', ()=>{
+  $('exportPdfBtn').addEventListener('click', ()=>{
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
@@ -1335,8 +1314,8 @@
     toast('PDF ডাউনলোড হচ্ছে');
   });
 
-  // ---------- JSON export / import ----------
-  document.getElementById('exportJsonBtn').addEventListener('click', ()=>{
+  // ---------- JSON export / import (dropdown-এর ভেতরে) ----------
+  $('exportJsonBtn').addEventListener('click', ()=>{
     const payload = { data, settings, exportedAt: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
@@ -1348,41 +1327,42 @@
     toast('JSON ব্যাকআপ ডাউনলোড হয়েছে');
   });
 
-  document.getElementById('importJsonBtn').addEventListener('click', ()=>{
-    document.getElementById('importFile').click();
-  });
-  document.getElementById('importFile').addEventListener('change', (e)=>{
+  $('importJsonBtn').addEventListener('click', ()=>$('importFile').click());
+  $('importFile').addEventListener('change', (e)=>{
     const file = e.target.files[0];
-    if(!file) return;
+    if(!file || !currentUser) return;
     const reader = new FileReader();
-    reader.onload = (evt)=>{
+    reader.onload = async (evt)=>{
       try{
         const parsed = JSON.parse(evt.target.result);
-        const incoming = parsed.data || parsed; // support raw data-only files too
-        const doMerge = confirm('এই ব্রাউজারে আগে থেকে থাকা ডেটার সাথে নতুন ডেটা যোগ (merge) করতে চান?\n\nOK = বর্তমান ডেটার সাথে যোগ হবে (একই তারিখ থাকলে নতুনটা বসবে)\nCancel = বর্তমান সব ডেটা মুছে শুধু ইমপোর্ট করা ডেটা থাকবে');
+        const incoming = parsed.data || parsed;
+        if(!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) throw new Error('bad');
+        const doMerge = confirm('আপনার অ্যাকাউন্টে আগে থেকে থাকা ডেটার সাথে নতুন ডেটা যোগ (merge) করতে চান?\n\nOK = বর্তমান ডেটার সাথে যোগ হবে (একই তারিখ থাকলে নতুনটা বসবে)\nCancel = বর্তমান সব ডেটা মুছে শুধু ইমপোর্ট করা ডেটা থাকবে');
+        toast('ইমপোর্ট হচ্ছে...');
         if(doMerge){
+          await dbBulkUpsert(incoming);
           data = Object.assign({}, data, incoming);
         } else {
+          await dbDeleteAll();
+          await dbBulkUpsert(incoming);
           data = incoming;
         }
         if(parsed.settings && Array.isArray(parsed.settings.weekend)){
-          settings = parsed.settings;
-          if(!settings.dutyStart) settings.dutyStart = '09:00';
-          if(!settings.dutyEnd) settings.dutyEnd = '17:00';
-          saveSettings();
+          settings = normSettings(parsed.settings);
+          await dbSaveSettings();
         }
-        saveData();
         renderAll();
         toast('ইমপোর্ট সম্পন্ন হয়েছে');
       }catch(err){
-        toast('ফাইলটি সঠিক নয়');
+        toast(err && err.message === 'bad' || err instanceof SyntaxError ? 'ফাইলটি সঠিক নয়' : 'ইমপোর্ট ব্যর্থ: ' + (err.message || 'নেটওয়ার্ক সমস্যা'));
       }
       e.target.value = '';
     };
     reader.readAsText(file);
   });
 
-  renderAll();
+  // শুরুতে auth স্ক্রিন দেখা যাবে; সেশন থাকলে onAuthStateChange নিজেই ঢুকিয়ে দেবে
+  setAuthMode('login');
 })();
 </script>
 </body>
